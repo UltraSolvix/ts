@@ -400,43 +400,60 @@ clone.style.position = 'absolute';
 clone.style.left = '-99999px';
 clone.style.top = '0';
 clone.style.width = `${Math.min(window.innerWidth * 0.9, 400)}px`;
-clone.style.fontSize = '14px';
-clone.style.background = '#000';
+clone.style.minHeight = 'fit-content';
+clone.style.fontSize = '16px'; // زيادة حجم الخط للوضوح
+clone.style.background = '#000000'; // خلفية سوداء تماماً
 clone.style.boxShadow = 'none';
-clone.style.color = '#00ffff';
-clone.style.fontWeight = '400';
-clone.style.padding = '20px';
-clone.style.letterSpacing = '0.5px';
-clone.style.wordSpacing = '1px';
-clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 400;">').replace('</strong>', '</span>');
+clone.style.color = '#00ffff'; // لون أكوا
+clone.style.fontFamily = 'Almarai, sans-serif';
+clone.style.fontWeight = '700'; // جعل الخط أكثر وضوحاً
+clone.style.padding = '25px'; // زيادة الحشو للمساحة
+clone.style.letterSpacing = '0.8px'; // تباعد أكبر للحروف
+clone.style.wordSpacing = '1.5px'; // تباعد أكبر للكلمات
+clone.style.lineHeight = '1.6'; // ارتفاع سطر أكبر
+clone.style.textRendering = 'optimizeLegibility'; // تحسين عرض النص
+clone.style.fontFeatureSettings = '"kern"'; // تحسين kerning للعربية
+clone.style.direction = 'rtl'; // التأكيد على الاتجاه
+clone.style.textAlign = 'right'; // محاذاة للعربية
+clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 700;">').replace('</strong>', '</span>');
 const boldSpans = clone.querySelectorAll('span[style*="font-weight:600"]');
-boldSpans.forEach(span => { span.style.fontWeight = '400'; });
+boldSpans.forEach(span => { span.style.fontWeight = '700'; }); // جعلها أقوى
 const opacitySpans = clone.querySelectorAll('span[style*="opacity:0.9"]');
 opacitySpans.forEach(span => { span.style.opacity = '1'; });
 const lines = clone.querySelectorAll('div[style*="display: flex"]');
 lines.forEach(line => {
   line.style.gap = '15px';
-  line.style.padding = '0 10px';
+  line.style.padding = '5px 10px';
+  line.style.margin = '8px 0'; // زيادة المسافات
   const spans = line.querySelectorAll('span');
   spans[0].style.width = '30%';
   spans[1].style.width = '40%';
   spans[2].style.width = '30%';
   spans[1].style.overflow = 'visible';
   spans[1].style.whiteSpace = 'normal';
+  spans.forEach(span => {
+    span.style.fontSize = '16px'; // حجم خط موحد أكبر
+    span.style.color = '#00ffff'; // تأكيد اللون
+  });
 });
 document.body.appendChild(clone);
 clone.offsetHeight; // Force reflow
 const pixelRatio = window.devicePixelRatio || 1;
 const opts = {
-scale: pixelRatio * 3,
+scale: pixelRatio * 4, // زيادة الـ scale لدقة أعلى (بدقة ممتازة)
 useCORS: true,
 allowTaint: true,
-backgroundColor: "#000000",
-logging: false
+backgroundColor: "#000000", // خلفية سوداء
+logging: false,
+windowWidth: clone.scrollWidth,
+windowHeight: clone.scrollHeight,
+width: clone.offsetWidth * 2, // زيادة العرض للدقة
+height: clone.offsetHeight * 2, // زيادة الارتفاع للدقة
+foreignObjectRendering: true // دعم أفضل للعناصر
 };
 const canvas = await html2canvas(clone, opts);
 clone.remove();
-const dataURL = canvas.toDataURL("image/png", 1.0);
+const dataURL = canvas.toDataURL("image/png", 1.0); // جودة كاملة
 const link = document.createElement("a");
 const now = new Date();
 const pad = n=>n.toString().padStart(2,'0');
@@ -463,4 +480,4 @@ scheduleDiv.scrollIntoView({behavior:'smooth', block:'end'});
 }
 </script>
 </body>
-</html>
+</html> 
