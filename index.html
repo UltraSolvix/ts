@@ -435,12 +435,11 @@ function showResult() {
       clone.style.top = '0';
       clone.style.width = `${Math.min(window.innerWidth * 0.9, 600)}px`;
       clone.style.minHeight = 'fit-content';
-      clone.style.fontSize = '18px';
       clone.style.background = '#000000';
-      clone.style.boxShadow = 'none';
       clone.style.color = '#00ffff';
-      clone.style.fontFamily = 'Almarai, sans-serif';
+      clone.style.fontFamily = 'Almarai, Arial, sans-serif'; // Added fallback font
       clone.style.fontWeight = '900';
+      clone.style.fontSize = '18px';
       clone.style.padding = '30px';
       clone.style.letterSpacing = '1px';
       clone.style.wordSpacing = '2px';
@@ -449,16 +448,24 @@ function showResult() {
       clone.style.fontFeatureSettings = '"kern"';
       clone.style.direction = 'rtl';
       clone.style.textAlign = 'right';
-      clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 900;">').replace('</strong>', '</span>');
+      clone.style.unicodeBidi = 'embed'; // Ensure proper Arabic text rendering
+      clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 900; color: #00ffff;">').replace('</strong>', '</span>');
       const boldSpans = clone.querySelectorAll('span[style*="font-weight:600"]');
-      boldSpans.forEach(span => { span.style.fontWeight = '900'; });
+      boldSpans.forEach(span => {
+        span.style.fontWeight = '900';
+        span.style.color = '#00ffff';
+      });
       const opacitySpans = clone.querySelectorAll('span[style*="opacity:0.9"]');
-      opacitySpans.forEach(span => { span.style.opacity = '1'; });
+      opacitySpans.forEach(span => {
+        span.style.opacity = '1';
+        span.style.color = '#00ffff';
+      });
       const lines = clone.querySelectorAll('div[style*="display: flex"]');
       lines.forEach(line => {
         line.style.gap = '20px';
         line.style.padding = '5px 15px';
         line.style.margin = '10px 0';
+        line.style.background = '#000000'; // Ensure black background for each line
         const spans = line.querySelectorAll('span');
         spans[0].style.width = '30%';
         spans[1].style.width = '40%';
@@ -469,14 +476,16 @@ function showResult() {
           span.style.fontSize = '18px';
           span.style.color = '#00ffff';
           span.style.textAlign = span.style.textAlign;
+          span.style.unicodeBidi = 'embed';
         });
       });
       document.body.appendChild(clone);
       clone.offsetHeight; // Force reflow
       await document.fonts.ready; // Ensure fonts are loaded
+      await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for rendering
       const pixelRatio = window.devicePixelRatio || 1;
       const opts = {
-        scale: pixelRatio * 2, // Reduced for better iOS compatibility
+        scale: 1, // Reduced to avoid canvas size issues
         useCORS: true,
         allowTaint: true,
         backgroundColor: "#000000",
@@ -485,9 +494,8 @@ function showResult() {
         windowHeight: clone.scrollHeight,
         width: clone.offsetWidth,
         height: clone.offsetHeight,
-        foreignObjectRendering: true,
-        dpi: 300, // Higher DPI for clarity
-        letterRendering: true // Better text rendering
+        dpi: 300,
+        letterRendering: true
       };
       const canvas = await html2canvas(clone, opts);
       clone.remove();
@@ -511,7 +519,7 @@ function showResult() {
       }, 'image/png', 1.0);
     } catch (err) {
       console.error(err);
-      alert("حدث خطأ أثناء إنشاء الصورة. حاول مرة أخرى.");
+      alert("حدث خطأ أثناء إنشاء الصورة. حاول مرة أخرى أو تأكد من اتصالك بالإنترنت.");
       btn.classList.remove("busy");
       btn.innerHTML = "⬇️";
     }
@@ -524,4 +532,4 @@ function showResult() {
 }
 </script>
 </body>
-</html> 
+</html>
