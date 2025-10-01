@@ -58,7 +58,7 @@ body {
 .input-container select {
   padding: 12px 10px;
   width: 100%;
-  border-radius: 8px;
+  border-radius: 20px;
   border: 2px solid #00ffff;
   background: rgba(0,0,0,0.25);
   color: #00ffff;
@@ -136,13 +136,12 @@ body {
   #scheduleCard { font-size: 0.85rem; min-width: 250px; }
 }
 </style>
-  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
 </head>
 <body>
 <div class="container">
   <div class="inner-container" id="questionContainer"></div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" crossorigin="anonymous"></script>
 <script>
 const questions = [
   {text: "العمر (سنوات)", type: "number", min: 1, max: 120},
@@ -407,13 +406,14 @@ function showResult() {
     let ml = Math.round(total_ml * w[1]);
     ml = Math.max(120, Math.min(350, ml));
     const line = document.createElement('div');
-    line.style.margin = "6px 0";
+    line.style.margin = "8px 0";
     line.style.display = "flex";
     line.style.justifyContent = "space-between";
-    line.style.gap = "10px";
-    line.innerHTML = `<span style="width: 25%; text-align: right; opacity: 0.9;">${timeStr}</span>
-      <span style="width: 50%; text-align: center; font-weight: 600;">${w[0]}</span>
-      <span style="width: 25%; text-align: left; opacity: 0.9;">${ml} ml</span>`;
+    line.style.gap = "15px";
+    line.style.alignItems = "center";
+    line.innerHTML = `<span style="width: 30%; text-align: right; color: #00ffff; white-space: nowrap;">${timeStr}</span>
+      <span style="width: 40%; text-align: center; font-weight: 700; color: #00ffff; white-space: normal;">${w[0]}</span>
+      <span style="width: 30%; text-align: left; color: #00ffff; white-space: nowrap;">${ml} ml</span>`;
     scheduleDiv.appendChild(line);
   });
 
@@ -432,62 +432,51 @@ function showResult() {
       clone.style.position = 'absolute';
       clone.style.left = '-99999px';
       clone.style.top = '0';
-      clone.style.width = `${Math.min(window.innerWidth * 0.9, 600)}px`;
+      clone.style.width = `${Math.min(window.innerWidth * 0.85, 550)}px`;
       clone.style.minHeight = 'fit-content';
       clone.style.background = '#000000';
       clone.style.color = '#00ffff';
       clone.style.fontFamily = 'Almarai, Arial, sans-serif';
-      clone.style.fontWeight = '900';
-      clone.style.fontSize = '18px';
-      clone.style.padding = '30px';
-      clone.style.letterSpacing = '1px';
-      clone.style.wordSpacing = '2px';
-      clone.style.lineHeight = '1.8';
+      clone.style.fontWeight = '700';
+      clone.style.fontSize = '16px';
+      clone.style.padding = '25px';
+      clone.style.letterSpacing = '0.5px';
+      clone.style.lineHeight = '1.6';
       clone.style.textRendering = 'optimizeLegibility';
-      clone.style.fontFeatureSettings = '"kern"';
+      clone.style.fontFeatureSettings = '"liga", "kern"';
       clone.style.direction = 'rtl';
       clone.style.textAlign = 'right';
       clone.style.unicodeBidi = 'embed';
-      clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 900; color: #00ffff;">').replace('</strong>', '</span>');
-      const boldSpans = clone.querySelectorAll('span[style*="font-weight:600"]');
-      boldSpans.forEach(span => {
-        span.style.fontWeight = '900';
-        span.style.color = '#00ffff';
-      });
-      const opacitySpans = clone.querySelectorAll('span[style*="opacity:0.9"]');
-      opacitySpans.forEach(span => {
-        span.style.opacity = '1';
-        span.style.color = '#00ffff';
-      });
+      clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 700; color: #00ffff;">').replace('</strong>', '</span>');
       const lines = clone.querySelectorAll('div[style*="display: flex"]');
       lines.forEach(line => {
-        line.style.gap = '20px';
-        line.style.padding = '5px 15px';
-        line.style.margin = '10px 0';
+        line.style.gap = '15px';
+        line.style.padding = '8px 12px';
+        line.style.margin = '8px 0';
         line.style.background = '#000000';
         const spans = line.querySelectorAll('span');
         spans[0].style.width = '30%';
         spans[1].style.width = '40%';
         spans[2].style.width = '30%';
-        spans[1].style.overflow = 'visible';
-        spans[1].style.whiteSpace = 'normal';
         spans.forEach(span => {
-          span.style.fontSize = '18px';
+          span.style.fontSize = '16px';
           span.style.color = '#00ffff';
-          span.style.textAlign = span.style.textAlign;
+          span.style.opacity = '1';
+          span.style.textAlign = span.style.textAlign || 'center';
           span.style.unicodeBidi = 'embed';
+          span.style.whiteSpace = span.style.whiteSpace || 'normal';
+          span.style.fontWeight = '700';
         });
       });
       document.body.appendChild(clone);
       clone.offsetHeight; // Force reflow
       await document.fonts.ready; // Ensure fonts are loaded
-      await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for rendering
-      const pixelRatio = window.devicePixelRatio || 1;
+      await new Promise(resolve => setTimeout(resolve, 150)); // Increased delay for font rendering
       const opts = {
         scale: 1,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: "#000000",
+        backgroundColor: '#000000',
         logging: false,
         windowWidth: clone.scrollWidth,
         windowHeight: clone.scrollHeight,
@@ -496,25 +485,26 @@ function showResult() {
         dpi: 300,
         letterRendering: true
       };
-     const dataUrl = await htmlToImage.toPng(clone, { backgroundColor: "#000000" });
-document.body.removeChild(clone);
-
-const link = document.createElement("a");
-const now = new Date();
-const pad = n => n.toString().padStart(2, '0');
-const fname = `hydration_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}.png`;
-link.download = fname;
-link.href = dataUrl;
-document.body.appendChild(link);
-link.click();
-document.body.removeChild(link);
-
-btn.innerHTML = "✅";
-setTimeout(() => {
-  btn.innerHTML = "⬇️";
-  btn.classList.remove("busy");
-}, 1200);
-
+      const canvas = await html2canvas(clone, opts);
+      clone.remove();
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const now = new Date();
+        const pad = n => n.toString().padStart(2, '0');
+        const fname = `hydration_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}.png`;
+        link.download = fname;
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        btn.innerHTML = "✅";
+        setTimeout(() => {
+          btn.innerHTML = "⬇️";
+          btn.classList.remove("busy");
+        }, 1200);
+      }, 'image/png', 1.0);
     } catch (err) {
       console.error(err);
       alert("حدث خطأ أثناء إنشاء الصورة. حاول مرة أخرى أو تأكد من اتصالك بالإنترنت.");
@@ -531,4 +521,3 @@ setTimeout(() => {
 </script>
 </body>
 </html>
-
