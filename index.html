@@ -439,14 +439,23 @@ function showResult() {
       const btnInClone = clone.querySelector('.download-btn');
       if (btnInClone) btnInClone.remove();
 
+      // Calculate dimensions based on device screen size
+      const isMobile = window.innerWidth <= 480;
+      const baseWidth = isMobile ? window.innerWidth * 0.9 : Math.min(window.innerWidth * 0.8, 600);
+      const fontSize = isMobile ? 16 : 18;
+      const titleFontSize = isMobile ? 20 : 22;
+      const padding = isMobile ? 15 : 20;
+      const linePadding = isMobile ? 6 : 8;
+      const lineMargin = isMobile ? 6 : 8;
+
       // Style the clone for image rendering
       clone.style.position = 'absolute';
       clone.style.left = '-99999px';
       clone.style.top = '0';
-      clone.style.width = `${Math.min(window.innerWidth * 0.9, 600)}px`;
+      clone.style.width = `${baseWidth}px`;
       clone.style.minHeight = 'fit-content';
-      clone.style.background = '#000000';
-      clone.style.color = '#00ffff';
+      clone.style.background = '#000000'; // Solid black background
+      clone.style.color = '#00ffff'; // Aqua text color
       clone.style.fontFamily = '"Almarai", "Noto Naskh Arabic", Arial, sans-serif';
       clone.style.fontWeight = '900';
       clone.style.direction = 'rtl';
@@ -456,18 +465,19 @@ function showResult() {
       clone.style.unicodeBidi = 'embed';
       clone.style.textRendering = 'optimizeLegibility';
       clone.style.webkitFontSmoothing = 'antialiased';
+      clone.style.mozOsxFontSmoothing = 'grayscale';
       clone.style.fontKerning = 'normal';
-      clone.style.padding = '20px';
+      clone.style.padding = `${padding}px`;
       clone.style.borderRadius = '14px';
-      clone.style.boxShadow = 'inset 0 0 30px purple';
+      clone.style.boxShadow = 'none'; // Remove any shadow for solid black background
 
       // Style the title
       const title = clone.querySelector('strong');
       if (title) {
-        title.style.fontSize = '22px';
+        title.style.fontSize = `${titleFontSize}px`;
         title.style.marginBottom = '15px';
         title.style.display = 'block';
-        title.style.color = '#00ffff';
+        title.style.color = '#00ffff'; // Aqua text color
         title.style.fontWeight = '900';
       }
 
@@ -475,15 +485,15 @@ function showResult() {
       const lines = clone.querySelectorAll('div[style*="display: flex"]');
       lines.forEach(line => {
         line.style.gap = '20px';
-        line.style.padding = '8px 18px';
-        line.style.margin = '8px 0';
-        line.style.background = '#000000';
+        line.style.padding = `${linePadding}px 18px`;
+        line.style.margin = `${lineMargin}px 0`;
+        line.style.background = '#000000'; // Solid black background
         const spans = line.querySelectorAll('span');
         spans.forEach(span => {
           span.style.display = 'inline';
-          span.style.fontSize = '18px';
+          span.style.fontSize = `${fontSize}px`;
           span.style.fontWeight = '900';
-          span.style.color = '#00ffff';
+          span.style.color = '#00ffff'; // Aqua text color
           span.style.whiteSpace = 'normal';
           span.style.unicodeBidi = 'embed';
           span.style.textAlign = 'inherit';
@@ -505,7 +515,7 @@ function showResult() {
       clone.offsetHeight;
 
       // Ensure fonts are loaded
-      await document.fonts.load('900 18px Almarai');
+      await document.fonts.load(`900 ${fontSize}px Almarai`);
       await document.fonts.ready;
 
       // Add small delay for rendering
@@ -513,15 +523,17 @@ function showResult() {
 
       // Configure html2canvas options
       const pixelRatio = window.devicePixelRatio || 1;
-      const scale = Math.max(1.5, Math.min(3, pixelRatio * 1.5));
+      const scale = Math.max(2, Math.min(4, pixelRatio * 2)); // Higher scale for clarity
+      const canvasWidth = Math.round(baseWidth * scale);
+      const canvasHeight = Math.round(clone.offsetHeight * scale);
       const opts = {
         scale: scale,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#000000',
+        backgroundColor: '#000000', // Solid black background
         logging: false,
-        width: Math.round(clone.offsetWidth * scale),
-        height: Math.round(clone.offsetHeight * scale)
+        width: canvasWidth,
+        height: canvasHeight
       };
 
       const canvas = await html2canvas(clone, opts);
