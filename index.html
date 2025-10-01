@@ -6,46 +6,59 @@
 <title>Hydration Pro Clinical — Smart Web</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@700;900&display=swap');
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: radial-gradient(circle at bottom center, #00ffff 0%, #0500aa 40%, #000000 100%);
-  font-family: 'Almarai', sans-serif;
-  color: #00ffff;
-  padding: 10px;
+* {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+body {
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* البنفسجي أسفل يسار، الأزرق أعلى يمين */
+  background: linear-gradient(to top left, purple 0%, blue 100%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  color:#0ff; /* نص أكوا واضح */
+}
+
+
+
 .container {
-  background: rgba(0,0,0,0.25);
+  background: rgba(0, 0, 0, 0.25); /* Slightly darker transparency for glassmorphism */
+  backdrop-filter: blur(15px); /* Stronger blur for enhanced glass effect */
   border-radius: 25px;
-  box-shadow: 0 0 20px 6px aqua, 0 0 40px 14px #00ffffaa;
+  border: 3px solid #00ffff; /* Thicker aqua border */
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.6), 0 0 50px rgba(0, 255, 255, 0.4); /* Deeper glowing shadow */
   width: 100%;
-  max-width: 700px;
-  height: 75vh;
+  max-width: 720px; /* Slightly wider for prominence */
+  height: 80vh; /* Taller for a more spacious feel */
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
+  padding: 25px;
+  transform: translateY(-10px); /* Subtle lift for floating effect */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.container:hover {
+  transform: translateY(-15px); /* Enhanced floating on hover */
+  box-shadow: 0 12px 40px rgba(0, 255, 255, 0.7), 0 0 60px rgba(0, 255, 255, 0.5);
 }
 .inner-container {
-  padding: 10px;
+  padding: 15px;
   overflow-y: auto;
   height: 100%;
   scrollbar-width: none;
 }
 .inner-container::-webkit-scrollbar { width: 0; }
 .question, .result-card, .schedule-card {
-  margin-bottom: 15px;
-  font-size: 1rem;
+  margin-bottom: 20px;
+  font-size: 1.1rem; /* Slightly larger for readability */
   display: flex;
   flex-direction: column;
-  transform: translateY(20px);
+  transform: translateY(25px);
   opacity: 0;
-  transition: all 0.4s ease;
+  transition: all 0.5s ease;
 }
 .question.show, .result-card.show, .schedule-card.show {
   transform: translateY(0);
@@ -57,45 +70,58 @@ body {
 }
 .input-container input,
 .input-container select {
-  padding: 12px 10px;
+  padding: 14px 12px;
   width: 100%;
-  border-radius: 20px;
-  border: 2px solid #00ffff;
-  background: rgba(0,0,0,0.25);
+  border-radius: 18px;
+  border: 2px solid #00ffff; /* Bright aqua border */
+  background: rgba(0, 0, 0, 0.15); /* More transparent input background */
   color: #00ffff;
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
   outline: none;
-  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.3); /* Subtle glow */
+}
+.input-container input:focus,
+.input-container select:focus {
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.7); /* Stronger glow on focus */
+  transform: scale(1.02); /* Slight scale for interactivity */
 }
 .input-container input::placeholder {
-  color: rgba(0,255,255,0.6);
-  font-size: 0.9rem;
+  color: rgba(0, 255, 255, 0.65);
+  font-size: 0.95rem;
 }
 .input-container select option {
   background: #000;
   color: #00ffff;
 }
 .result-card, .schedule-card {
-  background: rgba(0,0,0,0.4);
-  border-radius: 15px;
-  padding: 15px;
-  font-size: 1rem;
-  line-height: 1.5;
+  background: rgba(0, 0, 0, 0.35); /* Semi-transparent for glass effect */
+  border-radius: 18px;
+  border: 2px solid #00ffff;
+  padding: 20px;
+  font-size: 1.1rem;
+  line-height: 1.6;
   position: relative;
+  box-shadow: 0 6px 20px rgba(0, 255, 255, 0.5); /* Vibrant shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.result-card:hover, .schedule-card:hover {
+  transform: translateY(-5px); /* Subtle lift on hover */
+  box-shadow: 0 8px 25px rgba(0, 255, 255, 0.6);
 }
 #scheduleCard {
-  padding: 18px;
-  border-radius: 14px;
-  background: #000000;
-   box-shadow: 
-    inset 0 0 20px rgba(155, 48, 255, 0.4), /* ظل داخلي بنفسجي خفيف */
-    0 0 15px rgba(155, 48, 255, 0.2); 
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 3px solid #00ffff;
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.6), inset 0 0 25px rgba(0, 255, 255, 0.25);
   color: #00ffff;
   font-family: 'Almarai', "Noto Naskh Arabic", Arial, sans-serif;
   font-weight: 900;
-  min-width: 250px;
+  min-width: 280px;
   width: 90%;
-  max-width: 600px;
+  max-width: 620px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -113,39 +139,46 @@ body {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 400px;
-  margin: 6px 0;
-  padding: 8px 12px;
+  max-width: 420px;
+  margin: 8px 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.25), rgba(106, 17, 203, 0.25)); /* Vivid gradient */
+  box-shadow: 0 2px 10px rgba(0, 255, 255, 0.3);
+  transition: transform 0.2s ease;
+}
+#scheduleCard .schedule-line:hover {
+  transform: scale(1.03); /* Slight scale for interactivity */
 }
 #scheduleCard .schedule-line span {
   width: 50%;
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 900;
-  opacity: 0.9;
+  opacity: 0.95;
   white-space: nowrap;
 }
 .download-btn {
-  margin-top: 12px;
+  margin-top: 15px;
   align-self: center;
-  background: rgba(0,0,0,0.6);
-  border: 2px solid #00ffff;
+  background: linear-gradient(135deg, #00ccff, #9d4edd); /* More vivid gradient */
+  border: none;
   border-radius: 50%;
-  width: 52px;
-  height: 52px;
-  font-size: 20px;
-  color: #00ffff;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  color: #fff;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: 0.18s;
-  user-select: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0, 255, 255, 0.5);
 }
 .download-btn:hover {
-  background: #00ffff;
-  color: #000;
-  transform: translateY(-3px);
+  background: linear-gradient(135deg, #00ffcc, #d946ef); /* Brighter, more vibrant hover */
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 255, 255, 0.7);
 }
 .download-btn.busy {
   opacity: 0.7;
@@ -154,20 +187,22 @@ body {
 }
 .question-label {
   text-align: right;
-  margin-bottom: 5px;
-  font-weight: bold;
-  font-size: 1.1rem;
+  margin-bottom: 8px;
+  font-weight: 900;
+  font-size: 1.15rem;
   color: #00ffff;
-  opacity: 0.9;
+  opacity: 0.95;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.4); /* Subtle text glow */
 }
 @media (max-width: 480px) {
-  .container { height: auto; padding: 15px; }
-  .question, .result-card, .schedule-card { font-size: 0.9rem; }
-  .input-container input, .input-container select { font-size: 0.9rem; padding: 10px 8px; }
-  .download-btn { width: 48px; height: 48px; font-size: 18px; }
-  .question-label { font-size: 1rem; }
-  #scheduleCard { font-size: 0.85rem; min-width: 200px; width: 95%; }
-  #scheduleCard .schedule-line span { font-size: 0.9rem; }
+  .container { height: auto; padding: 15px; transform: translateY(0); }
+  .container:hover { transform: translateY(-5px); }
+  .question, .result-card, .schedule-card { font-size: 0.95rem; }
+  .input-container input, .input-container select { font-size: 0.95rem; padding: 10px 8px; }
+  .download-btn { width: 50px; height: 50px; font-size: 20px; }
+  .question-label { font-size: 1.05rem; }
+  #scheduleCard { font-size: 0.9rem; min-width: 220px; width: 95%; }
+  #scheduleCard .schedule-line span { font-size: 0.95rem; }
 }
 </style>
 </head>
@@ -253,7 +288,7 @@ function createQuestionElement(obj, index) {
     placeholder.disabled = true;
     placeholder.selected = true;
     placeholder.textContent = obj.text;
-    placeholder.style.color = "rgba(0,255,255,0.6)";
+    placeholder.style.color = "rgba(0,255,255,0.65)";
     input.appendChild(placeholder);
     obj.options.forEach(opt => {
       const option = document.createElement('option');
@@ -460,7 +495,7 @@ function showResult() {
       if (btnInClone) btnInClone.remove();
 
       const isMobile = window.innerWidth <= 480;
-      const baseWidth = isMobile ? window.innerWidth * 0.90 : Math.min(window.innerWidth * 0.85, 600);
+      const baseWidth = isMobile ? window.innerWidth * 0.90 : Math.min(window.innerWidth * 0.85, 620);
       const fontSize = isMobile ? 18 : 20;
       const titleFontSize = isMobile ? 22 : 24;
       const padding = isMobile ? 15 : 20;
@@ -473,7 +508,8 @@ function showResult() {
       clone.style.width = `${baseWidth}px`;
       clone.style.height = 'auto';
       clone.style.minHeight = 'fit-content';
-      clone.style.background = '#000000';
+      clone.style.background = '#000000';  // أسود صلب بدون شفافية
+      clone.style.border = '3px solid #00ffff';
       clone.style.color = '#00ffff';
       clone.style.fontFamily = '"Almarai", "Noto Naskh Arabic", Arial, sans-serif';
       clone.style.fontWeight = '900';
@@ -487,8 +523,8 @@ function showResult() {
       clone.style.mozOsxFontSmoothing = 'grayscale';
       clone.style.fontKerning = 'normal';
       clone.style.padding = `${padding}px`;
-      clone.style.borderRadius = '0';
-      clone.style.boxShadow = 'none';
+      clone.style.borderRadius = '16px';
+      clone.style.boxShadow = '0 10px 30px rgba(0, 255, 255, 0.6)';
       clone.style.margin = '0 auto';
       clone.style.display = 'flex';
       clone.style.flexDirection = 'column';
@@ -502,6 +538,7 @@ function showResult() {
         title.style.color = '#00ffff';
         title.style.fontWeight = '900';
         title.style.textAlign = 'center';
+        title.style.textShadow = '0 0 5px rgba(0, 255, 255, 0.4)';
       }
 
       const lines = clone.querySelectorAll('.schedule-line');
@@ -510,10 +547,11 @@ function showResult() {
         line.style.justifyContent = 'space-between';
         line.style.alignItems = 'center';
         line.style.width = '100%';
-        line.style.maxWidth = '400px';
+        line.style.maxWidth = '420px';
         line.style.padding = `${linePadding}px`;
         line.style.margin = `${lineMargin}px auto`;
-        line.style.background = '#000000';
+        line.style.background = 'linear-gradient(135deg, rgba(0, 255, 255, 0.25), rgba(106, 17, 203, 0.25))';
+        line.style.boxShadow = '0 2px 10px rgba(0, 255, 255, 0.3)';
         const spans = line.querySelectorAll('span');
         spans.forEach(span => {
           span.style.display = 'inline-block';
@@ -525,7 +563,8 @@ function showResult() {
           span.style.unicodeBidi = 'embed';
           span.style.textAlign = 'center';
           span.style.width = '50%';
-          span.style.opacity = '0.9';
+          span.style.opacity = '0.95';
+          span.style.textShadow = '0 0 5px rgba(0, 255, 255, 0.3)';
         });
       });
 
@@ -544,7 +583,7 @@ function showResult() {
         scale: scale,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#000000',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
         logging: false,
         width: canvasWidth / scale,
         height: canvasHeight / scale,
@@ -590,5 +629,3 @@ function showResult() {
 </script>
 </body>
 </html>
-
-
