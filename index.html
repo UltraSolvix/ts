@@ -91,14 +91,38 @@ body {
   color: #00ffff;
   font-family: 'Almarai', "Noto Naskh Arabic", Arial, sans-serif;
   font-weight: 900;
-  min-width: 300px;
-  width: 100%;
+  min-width: 250px;
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-kerning: normal;
 }
-#scheduleCard span { color: #00ffff; }
+#scheduleCard span {
+  color: #00ffff;
+}
+#scheduleCard .schedule-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 6px 0;
+  padding: 8px 12px;
+}
+#scheduleCard .schedule-line span {
+  width: 50%;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 900;
+  opacity: 0.9;
+  white-space: nowrap;
+}
 .download-btn {
   margin-top: 12px;
   align-self: center;
@@ -134,13 +158,14 @@ body {
   color: #00ffff;
   opacity: 0.9;
 }
-@media (max-width:480px) {
+@media (max-width: 480px) {
   .container { height: auto; padding: 15px; }
   .question, .result-card, .schedule-card { font-size: 0.9rem; }
   .input-container input, .input-container select { font-size: 0.9rem; padding: 10px 8px; }
   .download-btn { width: 48px; height: 48px; font-size: 18px; }
   .question-label { font-size: 1rem; }
-  #scheduleCard { font-size: 0.85rem; min-width: 250px; }
+  #scheduleCard { font-size: 0.85rem; min-width: 200px; width: 95%; }
+  #scheduleCard .schedule-line span { font-size: 0.9rem; }
 }
 </style>
 </head>
@@ -406,20 +431,15 @@ function showResult() {
   let scheduleDiv = document.createElement('div');
   scheduleDiv.classList.add('schedule-card');
   scheduleDiv.id = "scheduleCard";
-  scheduleDiv.innerHTML = "<strong> Your Program :</strong><br><br>";
+  scheduleDiv.innerHTML = "<strong>🕒 جدول الترطيب اليومي:</strong><br><br>";
 
   windows.forEach((w, i) => {
     const timeStr = times[w[0]];
     let ml = Math.round(total_ml * w[1]);
     ml = Math.max(120, Math.min(350, ml));
     const line = document.createElement('div');
-    line.style.margin = "6px 0";
-    line.style.display = "flex";
-    line.style.justifyContent = "space-between";
-    line.style.gap = "10px";
-    line.style.alignItems = "center";
-    line.innerHTML = `<span style="width: 50%; text-align: right; opacity:0.9; white-space: nowrap;">${timeStr}</span>
-      <span style="width: 50%; text-align: left; opacity:0.9; white-space: nowrap;">${ml} ml</span>`;
+    line.classList.add('schedule-line');
+    line.innerHTML = `<span>${timeStr}</span><span>${ml} مل</span>`;
     scheduleDiv.appendChild(line);
   });
 
@@ -438,12 +458,12 @@ function showResult() {
       if (btnInClone) btnInClone.remove();
 
       const isMobile = window.innerWidth <= 480;
-      const baseWidth = isMobile ? window.innerWidth * 0.95 : Math.min(window.innerWidth * 0.85, 650);
-      const fontSize = isMobile ? 20 : 22;
-      const titleFontSize = isMobile ? 24 : 26;
-      const padding = isMobile ? 20 : 25;
-      const linePadding = isMobile ? 10 : 12;
-      const lineMargin = isMobile ? 10 : 12;
+      const baseWidth = isMobile ? window.innerWidth * 0.90 : Math.min(window.innerWidth * 0.85, 600);
+      const fontSize = isMobile ? 18 : 20;
+      const titleFontSize = isMobile ? 22 : 24;
+      const padding = isMobile ? 15 : 20;
+      const linePadding = isMobile ? 8 : 10;
+      const lineMargin = isMobile ? 8 : 10;
 
       clone.style.position = 'absolute';
       clone.style.left = '-99999px';
@@ -467,6 +487,10 @@ function showResult() {
       clone.style.padding = `${padding}px`;
       clone.style.borderRadius = '0';
       clone.style.boxShadow = 'none';
+      clone.style.margin = '0 auto';
+      clone.style.display = 'flex';
+      clone.style.flexDirection = 'column';
+      clone.style.alignItems = 'center';
 
       const title = clone.querySelector('strong');
       if (title) {
@@ -478,14 +502,16 @@ function showResult() {
         title.style.textAlign = 'center';
       }
 
-      const lines = clone.querySelectorAll('div[style*="display: flex"]');
+      const lines = clone.querySelectorAll('.schedule-line');
       lines.forEach(line => {
-        line.style.gap = '15px';
-        line.style.padding = `${linePadding}px`;
-        line.style.margin = `${lineMargin}px 0`;
-        line.style.background = '#000000';
-        line.style.justifyContent = 'center';
+        line.style.display = 'flex';
+        line.style.justifyContent = 'space-between';
         line.style.alignItems = 'center';
+        line.style.width = '100%';
+        line.style.maxWidth = '400px';
+        line.style.padding = `${linePadding}px`;
+        line.style.margin = `${lineMargin}px auto`;
+        line.style.background = '#000000';
         const spans = line.querySelectorAll('span');
         spans.forEach(span => {
           span.style.display = 'inline-block';
@@ -495,14 +521,10 @@ function showResult() {
           span.style.whiteSpace = 'nowrap';
           span.style.overflow = 'visible';
           span.style.unicodeBidi = 'embed';
-          span.style.textAlign = 'inherit';
+          span.style.textAlign = 'center';
           span.style.width = '50%';
-          span.style.opacity = '1';
+          span.style.opacity = '0.9';
         });
-        if (spans.length >= 2) {
-          spans[0].style.textAlign = 'right';
-          spans[1].style.textAlign = 'left';
-        }
       });
 
       document.body.appendChild(clone);
