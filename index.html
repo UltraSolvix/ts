@@ -406,7 +406,7 @@ function showResult() {
   let scheduleDiv = document.createElement('div');
   scheduleDiv.classList.add('schedule-card');
   scheduleDiv.id = "scheduleCard";
-  scheduleDiv.innerHTML = "<strong>🕒 جدول الترطيب اليومي:</strong><br><br>";
+  scheduleDiv.innerHTML = "<strong> Your Program :</strong><br><br>";
 
   windows.forEach((w, i) => {
     const timeStr = times[w[0]];
@@ -418,9 +418,8 @@ function showResult() {
     line.style.justifyContent = "space-between";
     line.style.gap = "10px";
     line.style.alignItems = "center";
-    line.innerHTML = `<span style="width: 25%; text-align: right; opacity:0.9; white-space: nowrap;">${timeStr}</span>
-      <span style="width: 50%; text-align: center; font-weight:600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${w[0]}</span>
-      <span style="width: 25%; text-align: left; opacity:0.9; white-space: nowrap;">${ml} ml</span>`;
+    line.innerHTML = `<span style="width: 50%; text-align: right; opacity:0.9; white-space: nowrap;">${timeStr}</span>
+      <span style="width: 50%; text-align: left; opacity:0.9; white-space: nowrap;">${ml} ml</span>`;
     scheduleDiv.appendChild(line);
   });
 
@@ -434,12 +433,10 @@ function showResult() {
       btn.classList.add("busy");
       btn.innerHTML = "⏳";
 
-      // Clone the schedule div for rendering
       const clone = scheduleDiv.cloneNode(true);
       const btnInClone = clone.querySelector('.download-btn');
       if (btnInClone) btnInClone.remove();
 
-      // Calculate dimensions based on device screen size
       const isMobile = window.innerWidth <= 480;
       const baseWidth = isMobile ? window.innerWidth * 0.95 : Math.min(window.innerWidth * 0.85, 650);
       const fontSize = isMobile ? 20 : 22;
@@ -448,20 +445,19 @@ function showResult() {
       const linePadding = isMobile ? 10 : 12;
       const lineMargin = isMobile ? 10 : 12;
 
-      // Style the clone for image rendering
       clone.style.position = 'absolute';
       clone.style.left = '-99999px';
       clone.style.top = '0';
       clone.style.width = `${baseWidth}px`;
       clone.style.height = 'auto';
       clone.style.minHeight = 'fit-content';
-      clone.style.background = '#000000'; // Solid black background
-      clone.style.color = '#00ffff'; // Aqua text color
+      clone.style.background = '#000000';
+      clone.style.color = '#00ffff';
       clone.style.fontFamily = '"Almarai", "Noto Naskh Arabic", Arial, sans-serif';
       clone.style.fontWeight = '900';
       clone.style.direction = 'rtl';
-      clone.style.textAlign = 'center'; // Change to center for better alignment
-      clone.style.letterSpacing = '0.5px'; // Slight letter spacing for clarity
+      clone.style.textAlign = 'center';
+      clone.style.letterSpacing = '0.5px';
       clone.style.wordSpacing = 'normal';
       clone.style.unicodeBidi = 'embed';
       clone.style.textRendering = 'optimizeLegibility';
@@ -469,10 +465,9 @@ function showResult() {
       clone.style.mozOsxFontSmoothing = 'grayscale';
       clone.style.fontKerning = 'normal';
       clone.style.padding = `${padding}px`;
-      clone.style.borderRadius = '0'; // Remove radius for full image
-      clone.style.boxShadow = 'none'; // No shadow
+      clone.style.borderRadius = '0';
+      clone.style.boxShadow = 'none';
 
-      // Style the title
       const title = clone.querySelector('strong');
       if (title) {
         title.style.fontSize = `${titleFontSize}px`;
@@ -483,14 +478,13 @@ function showResult() {
         title.style.textAlign = 'center';
       }
 
-      // Style each line
       const lines = clone.querySelectorAll('div[style*="display: flex"]');
       lines.forEach(line => {
         line.style.gap = '15px';
         line.style.padding = `${linePadding}px`;
         line.style.margin = `${lineMargin}px 0`;
         line.style.background = '#000000';
-        line.style.justifyContent = 'center'; // Center the content
+        line.style.justifyContent = 'center';
         line.style.alignItems = 'center';
         const spans = line.querySelectorAll('span');
         spans.forEach(span => {
@@ -498,39 +492,28 @@ function showResult() {
           span.style.fontSize = `${fontSize}px`;
           span.style.fontWeight = '900';
           span.style.color = '#00ffff';
-          span.style.whiteSpace = 'nowrap'; // Prevent wrapping to avoid cutoff
-          span.style.overflow = 'visible'; // Ensure no overflow hidden
+          span.style.whiteSpace = 'nowrap';
+          span.style.overflow = 'visible';
           span.style.unicodeBidi = 'embed';
           span.style.textAlign = 'inherit';
-          span.style.width = 'auto';
-          span.style.opacity = '1'; // Full opacity
+          span.style.width = '50%';
+          span.style.opacity = '1';
         });
-        if (spans.length >= 3) {
-          spans[0].style.flex = '1';
+        if (spans.length >= 2) {
           spans[0].style.textAlign = 'right';
-          spans[1].style.flex = '2';
-          spans[1].style.textAlign = 'center';
-          spans[2].style.flex = '1';
-          spans[2].style.textAlign = 'left';
+          spans[1].style.textAlign = 'left';
         }
       });
 
       document.body.appendChild(clone);
-
-      // Force reflow
       clone.offsetHeight;
-
-      // Ensure fonts are loaded
       await document.fonts.load(`900 ${fontSize}px Almarai`);
       await document.fonts.load(`900 ${fontSize}px "Noto Naskh Arabic"`);
       await document.fonts.ready;
-
-      // Add longer delay for rendering
       await new Promise(resolve => setTimeout(resolve, 300));
 
-      // Configure html2canvas options
       const pixelRatio = window.devicePixelRatio || 1;
-      const scale = isMobile ? 4 : 3; // Higher scale for mobile clarity
+      const scale = isMobile ? 4 : 3;
       const canvasWidth = Math.round(clone.getBoundingClientRect().width * scale);
       const canvasHeight = Math.round(clone.getBoundingClientRect().height * scale);
       const opts = {
@@ -539,7 +522,7 @@ function showResult() {
         allowTaint: true,
         backgroundColor: '#000000',
         logging: false,
-        width: canvasWidth / scale, // Use actual size
+        width: canvasWidth / scale,
         height: canvasHeight / scale,
         windowWidth: clone.scrollWidth,
         windowHeight: clone.scrollHeight
