@@ -88,7 +88,7 @@ border-radius: 14px;
 background: #000;
 box-shadow: inset 0 0 30px purple;
 color: #00ffff;
-font-family: Arial, sans-serif;
+font-family: 'Almarai', sans-serif;
 min-width: 300px;
 width: 100%;
 }
@@ -393,22 +393,27 @@ btn.addEventListener("click", async () => {
 try {
 btn.classList.add("busy");
 btn.innerHTML = "⏳";
-const pixelRatio = window.devicePixelRatio || 1; // للتناسب مع دقة الشاشة (مثل Retina أو هواتف عالية الدقة)
+const clone = scheduleDiv.cloneNode(true);
+const btnInClone = clone.querySelector('.download-btn');
+if (btnInClone) btnInClone.remove();
+clone.style.position = 'absolute';
+clone.style.left = '-99999px';
+clone.style.top = '0';
+clone.style.width = '400px';
+clone.style.fontSize = '16px';
+document.body.appendChild(clone);
+clone.offsetHeight; // Force reflow
+const pixelRatio = window.devicePixelRatio || 1;
 const opts = {
-scale: pixelRatio * 2, // زيادة الدقة للحفاظ على الوضوح عند التنزيل
-useCORS: true, // لتحميل الخطوط من Google Fonts بشكل صحيح
-allowTaint: true, // للسماح بتلويث الصورة إذا لزم الأمر
-backgroundColor: "#000000", // الحفاظ على خلفية سوداء للتناسق
-scrollX: 0,
-scrollY: 0,
-windowWidth: scheduleDiv.offsetWidth, // استخدام عرض العنصر الفعلي للتناسب
-windowHeight: scheduleDiv.offsetHeight, // استخدام ارتفاع العنصر الفعلي للتناسب
-x: 0,
-y: 0,
-logging: false // تعطيل السجلات لتجنب المشاكل
+scale: pixelRatio * 2,
+useCORS: true,
+allowTaint: true,
+backgroundColor: "#000000",
+logging: false
 };
-const canvas = await html2canvas(scheduleDiv, opts);
-const dataURL = canvas.toDataURL("image/png", 1.0); // جودة كاملة للحفاظ على الألوان والتفاصيل
+const canvas = await html2canvas(clone, opts);
+clone.remove();
+const dataURL = canvas.toDataURL("image/png", 1.0);
 const link = document.createElement("a");
 const now = new Date();
 const pad = n=>n.toString().padStart(2,'0');
