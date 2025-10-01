@@ -86,14 +86,14 @@ body {
 #scheduleCard {
   padding: 18px;
   border-radius: 14px;
-  background: #000000;        /* خلفية سوداء صافية */
+  background: #000000;
   box-shadow: inset 0 0 30px purple;
-  color: #00ffff;             /* لون النص أكوا */
+  color: #00ffff;
   font-family: 'Almarai', "Noto Naskh Arabic", Arial, sans-serif;
   font-weight: 900;
   min-width: 300px;
   width: 100%;
-  -webkit-font-smoothing: antialiased; /* تحسين رسم الحروف */
+  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-kerning: normal;
@@ -429,54 +429,57 @@ function showResult() {
   btn.setAttribute("title", "تحميل الجدول كصورة");
   btn.innerHTML = "⬇️";
 
-  // زر التحميل - نسخة محسّنة لضمان خلفية سوداء ونص أكوا وخط عربي واضح
   btn.addEventListener("click", async () => {
     try {
       btn.classList.add("busy");
       btn.innerHTML = "⏳";
 
-      // استنساخ الجدول وتحضير نسخة نظيفة
+      // Clone the schedule div for rendering
       const clone = scheduleDiv.cloneNode(true);
-      // إزالة زر التحميل إن وجد في النسخة
       const btnInClone = clone.querySelector('.download-btn');
       if (btnInClone) btnInClone.remove();
 
-      // اجعل النسخة غير مرئية في الصفحة لكن قابلة للـ render
+      // Style the clone for image rendering
       clone.style.position = 'absolute';
       clone.style.left = '-99999px';
       clone.style.top = '0';
       clone.style.width = `${Math.min(window.innerWidth * 0.9, 600)}px`;
       clone.style.minHeight = 'fit-content';
-
-      // أهم ستايلات لضمان خلفية سوداء ونص أكوا وخط عربي واضح
       clone.style.background = '#000000';
       clone.style.color = '#00ffff';
-      clone.style.fontFamily = 'Almarai, "Noto Naskh Arabic", Arial, sans-serif';
+      clone.style.fontFamily = '"Almarai", "Noto Naskh Arabic", Arial, sans-serif';
       clone.style.fontWeight = '900';
       clone.style.direction = 'rtl';
       clone.style.textAlign = 'right';
-      clone.style.letterSpacing = 'normal';   // مهم: لا تزيد letter-spacing لأن ده يقطع ربط الحروف العربية
+      clone.style.letterSpacing = 'normal';
       clone.style.wordSpacing = 'normal';
       clone.style.unicodeBidi = 'embed';
       clone.style.textRendering = 'optimizeLegibility';
       clone.style.webkitFontSmoothing = 'antialiased';
       clone.style.fontKerning = 'normal';
+      clone.style.padding = '20px';
+      clone.style.borderRadius = '14px';
+      clone.style.boxShadow = 'inset 0 0 30px purple';
 
-      // تعديل الأسطر داخل النسخة لضمان تباعد مناسب وحجم مريح للعين
+      // Style the title
+      const title = clone.querySelector('strong');
+      if (title) {
+        title.style.fontSize = '22px';
+        title.style.marginBottom = '15px';
+        title.style.display = 'block';
+        title.style.color = '#00ffff';
+        title.style.fontWeight = '900';
+      }
+
+      // Style each line
       const lines = clone.querySelectorAll('div[style*="display: flex"]');
       lines.forEach(line => {
         line.style.gap = '20px';
-        line.style.padding = '6px 18px';
+        line.style.padding = '8px 18px';
         line.style.margin = '8px 0';
         line.style.background = '#000000';
         const spans = line.querySelectorAll('span');
-        if (spans.length >= 3) {
-          spans[0].style.width = '30%';
-          spans[1].style.width = '40%';
-          spans[2].style.width = '30%';
-        }
-        // تأكد أن كل سبان يُعرض كسطر نصي عادي (يساعد على إبقاء الحروف موصولة)
-        line.querySelectorAll('span').forEach(span => {
+        spans.forEach(span => {
           span.style.display = 'inline';
           span.style.fontSize = '18px';
           span.style.fontWeight = '900';
@@ -484,7 +487,16 @@ function showResult() {
           span.style.whiteSpace = 'normal';
           span.style.unicodeBidi = 'embed';
           span.style.textAlign = 'inherit';
+          span.style.width = 'auto';
         });
+        if (spans.length >= 3) {
+          spans[0].style.width = '30%';
+          spans[0].style.textAlign = 'right';
+          spans[1].style.width = '40%';
+          spans[1].style.textAlign = 'center';
+          spans[2].style.width = '30%';
+          spans[2].style.textAlign = 'left';
+        }
       });
 
       document.body.appendChild(clone);
@@ -492,27 +504,22 @@ function showResult() {
       // Force reflow
       clone.offsetHeight;
 
-      // تأكد من تحميل خط Almarai بوزن 900 قبل الرسم
-      try {
-        await document.fonts.load('900 18px "Almarai"');
-      } catch (e) {
-        // لا تقطع التنفيذ إن فشل؛ document.fonts.ready يعطي مؤكد لاحقًا
-      }
+      // Ensure fonts are loaded
+      await document.fonts.load('900 18px Almarai');
       await document.fonts.ready;
-      // وقت صغير كي تتأكد المتصفحات رندرت كل شيء
-      await new Promise(resolve => setTimeout(resolve, 120));
 
-      // دقة الصورة - استخدم devicePixelRatio لجعل الصورة حادة
+      // Add small delay for rendering
+      await new Promise(resolve => setTimeout(resolve, 150));
+
+      // Configure html2canvas options
       const pixelRatio = window.devicePixelRatio || 1;
-      const scale = Math.max(1, Math.min(3, pixelRatio * 1)); // يمكن تعديل المضاعف هنا (1 أو 2) لتحسين الحدة
+      const scale = Math.max(1.5, Math.min(3, pixelRatio * 1.5));
       const opts = {
         scale: scale,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: "#000000",
+        backgroundColor: '#000000',
         logging: false,
-        windowWidth: clone.scrollWidth,
-        windowHeight: clone.scrollHeight,
         width: Math.round(clone.offsetWidth * scale),
         height: Math.round(clone.offsetHeight * scale)
       };
