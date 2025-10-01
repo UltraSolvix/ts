@@ -405,16 +405,30 @@ clone.style.background = '#000';
 clone.style.boxShadow = 'none';
 clone.style.color = '#00ffff';
 clone.style.fontWeight = '400';
+clone.style.padding = '20px';
+clone.style.letterSpacing = '0.5px';
+clone.style.wordSpacing = '1px';
 clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 400;">').replace('</strong>', '</span>');
 const boldSpans = clone.querySelectorAll('span[style*="font-weight:600"]');
 boldSpans.forEach(span => { span.style.fontWeight = '400'; });
 const opacitySpans = clone.querySelectorAll('span[style*="opacity:0.9"]');
 opacitySpans.forEach(span => { span.style.opacity = '1'; });
+const lines = clone.querySelectorAll('div[style*="display: flex"]');
+lines.forEach(line => {
+  line.style.gap = '15px';
+  line.style.padding = '0 10px';
+  const spans = line.querySelectorAll('span');
+  spans[0].style.width = '30%';
+  spans[1].style.width = '40%';
+  spans[2].style.width = '30%';
+  spans[1].style.overflow = 'visible';
+  spans[1].style.whiteSpace = 'normal';
+});
 document.body.appendChild(clone);
 clone.offsetHeight; // Force reflow
 const pixelRatio = window.devicePixelRatio || 1;
 const opts = {
-scale: pixelRatio * 2,
+scale: pixelRatio * 3,
 useCORS: true,
 allowTaint: true,
 backgroundColor: "#000000",
@@ -449,4 +463,4 @@ scheduleDiv.scrollIntoView({behavior:'smooth', block:'end'});
 }
 </script>
 </body>
-</html> 
+</html>
