@@ -399,8 +399,17 @@ if (btnInClone) btnInClone.remove();
 clone.style.position = 'absolute';
 clone.style.left = '-99999px';
 clone.style.top = '0';
-clone.style.width = '400px';
-clone.style.fontSize = '16px';
+clone.style.width = `${Math.min(window.innerWidth * 0.9, 400)}px`;
+clone.style.fontSize = '14px';
+clone.style.background = '#000';
+clone.style.boxShadow = 'none';
+clone.style.color = '#00ffff';
+clone.style.fontWeight = '400';
+clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 400;">').replace('</strong>', '</span>');
+const boldSpans = clone.querySelectorAll('span[style*="font-weight:600"]');
+boldSpans.forEach(span => { span.style.fontWeight = '400'; });
+const opacitySpans = clone.querySelectorAll('span[style*="opacity:0.9"]');
+opacitySpans.forEach(span => { span.style.opacity = '1'; });
 document.body.appendChild(clone);
 clone.offsetHeight; // Force reflow
 const pixelRatio = window.devicePixelRatio || 1;
@@ -440,4 +449,4 @@ scheduleDiv.scrollIntoView({behavior:'smooth', block:'end'});
 }
 </script>
 </body>
-</html>
+</html> 
