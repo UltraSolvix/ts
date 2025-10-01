@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8" />
@@ -12,7 +13,7 @@ body {
   justify-content: center;
   align-items: center;
   background: radial-gradient(circle at bottom center, #00ffff 0%, #0500aa 40%, #000000 100%);
-  font-family: 'Almarai', Arial, sans-serif;
+  font-family: 'Almarai', sans-serif;
   color: #00ffff;
   padding: 10px;
   box-sizing: border-box;
@@ -85,11 +86,17 @@ body {
 #scheduleCard {
   padding: 18px;
   border-radius: 14px;
-  background: #000;
-  color: #00ffff;
-  font-family: 'Almarai', Arial, sans-serif;
+  background: #000000;        /* خلفية سوداء صافية */
+  box-shadow: inset 0 0 30px purple;
+  color: #00ffff;             /* لون النص أكوا */
+  font-family: 'Almarai', "Noto Naskh Arabic", Arial, sans-serif;
+  font-weight: 900;
   min-width: 300px;
   width: 100%;
+  -webkit-font-smoothing: antialiased; /* تحسين رسم الحروف */
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
 }
 #scheduleCard span { color: #00ffff; }
 .download-btn {
@@ -180,7 +187,7 @@ const questions = [
   {text: "لون البول صباحًا/بعد التمرين", type: "select", options: ["شفاف", "فاتح", "غامق"], default: "فاتح"},
   {text: "كم مرة تتبول يوميًا؟", type: "number", min: 0, max: 20, default: 6},
   {text: "هل تتبول ليلًا؟", type: "select", options: ["نعم", "لا"], default: "لا"},
-  {text: "أعراض جفاف (صداع/تعب/تشنجات)؟", type: "select", options: ["نعم", "لا"], default: "لا"},
+  {text: "أعراض جفاف (صداع/تعب/تشنجات)?", type: "select", options: ["نعم", "لا"], default: "لا"},
   {text: "متوسط معدل ضربات القلب أثناء التمرين (BPM)", type: "number", min: 0, max: 220, default: 0},
   {text: "وقت الاستيقاظ", type: "time", default: "06:00", placeholder: "اختر وقت الاستيقاظ (HH:MM)"},
   {text: "وقت النوم", type: "time", default: "22:30", placeholder: "اختر وقت النوم (HH:MM)"},
@@ -406,14 +413,14 @@ function showResult() {
     let ml = Math.round(total_ml * w[1]);
     ml = Math.max(120, Math.min(350, ml));
     const line = document.createElement('div');
-    line.style.margin = "8px 0";
+    line.style.margin = "6px 0";
     line.style.display = "flex";
     line.style.justifyContent = "space-between";
-    line.style.gap = "15px";
+    line.style.gap = "10px";
     line.style.alignItems = "center";
-    line.innerHTML = `<span style="width: 30%; text-align: right; color: #00ffff; white-space: nowrap;">${timeStr}</span>
-      <span style="width: 40%; text-align: center; font-weight: 700; color: #00ffff; white-space: normal;">${w[0]}</span>
-      <span style="width: 30%; text-align: left; color: #00ffff; white-space: nowrap;">${ml} ml</span>`;
+    line.innerHTML = `<span style="width: 25%; text-align: right; opacity:0.9; white-space: nowrap;">${timeStr}</span>
+      <span style="width: 50%; text-align: center; font-weight:600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${w[0]}</span>
+      <span style="width: 25%; text-align: left; opacity:0.9; white-space: nowrap;">${ml} ml</span>`;
     scheduleDiv.appendChild(line);
   });
 
@@ -422,71 +429,97 @@ function showResult() {
   btn.setAttribute("title", "تحميل الجدول كصورة");
   btn.innerHTML = "⬇️";
 
+  // زر التحميل - نسخة محسّنة لضمان خلفية سوداء ونص أكوا وخط عربي واضح
   btn.addEventListener("click", async () => {
     try {
       btn.classList.add("busy");
       btn.innerHTML = "⏳";
+
+      // استنساخ الجدول وتحضير نسخة نظيفة
       const clone = scheduleDiv.cloneNode(true);
+      // إزالة زر التحميل إن وجد في النسخة
       const btnInClone = clone.querySelector('.download-btn');
       if (btnInClone) btnInClone.remove();
+
+      // اجعل النسخة غير مرئية في الصفحة لكن قابلة للـ render
       clone.style.position = 'absolute';
       clone.style.left = '-99999px';
       clone.style.top = '0';
-      clone.style.width = `${Math.min(window.innerWidth * 0.85, 550)}px`;
+      clone.style.width = `${Math.min(window.innerWidth * 0.9, 600)}px`;
       clone.style.minHeight = 'fit-content';
+
+      // أهم ستايلات لضمان خلفية سوداء ونص أكوا وخط عربي واضح
       clone.style.background = '#000000';
       clone.style.color = '#00ffff';
-      clone.style.fontFamily = 'Almarai, Arial, sans-serif';
-      clone.style.fontWeight = '700';
-      clone.style.fontSize = '16px';
-      clone.style.padding = '25px';
-      clone.style.letterSpacing = '0.5px';
-      clone.style.lineHeight = '1.6';
-      clone.style.textRendering = 'optimizeLegibility';
-      clone.style.fontFeatureSettings = '"liga", "kern"';
+      clone.style.fontFamily = 'Almarai, "Noto Naskh Arabic", Arial, sans-serif';
+      clone.style.fontWeight = '900';
       clone.style.direction = 'rtl';
       clone.style.textAlign = 'right';
+      clone.style.letterSpacing = 'normal';   // مهم: لا تزيد letter-spacing لأن ده يقطع ربط الحروف العربية
+      clone.style.wordSpacing = 'normal';
       clone.style.unicodeBidi = 'embed';
-      clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 700; color: #00ffff;">').replace('</strong>', '</span>');
+      clone.style.textRendering = 'optimizeLegibility';
+      clone.style.webkitFontSmoothing = 'antialiased';
+      clone.style.fontKerning = 'normal';
+
+      // تعديل الأسطر داخل النسخة لضمان تباعد مناسب وحجم مريح للعين
       const lines = clone.querySelectorAll('div[style*="display: flex"]');
       lines.forEach(line => {
-        line.style.gap = '15px';
-        line.style.padding = '8px 12px';
+        line.style.gap = '20px';
+        line.style.padding = '6px 18px';
         line.style.margin = '8px 0';
         line.style.background = '#000000';
         const spans = line.querySelectorAll('span');
-        spans[0].style.width = '30%';
-        spans[1].style.width = '40%';
-        spans[2].style.width = '30%';
-        spans.forEach(span => {
-          span.style.fontSize = '16px';
+        if (spans.length >= 3) {
+          spans[0].style.width = '30%';
+          spans[1].style.width = '40%';
+          spans[2].style.width = '30%';
+        }
+        // تأكد أن كل سبان يُعرض كسطر نصي عادي (يساعد على إبقاء الحروف موصولة)
+        line.querySelectorAll('span').forEach(span => {
+          span.style.display = 'inline';
+          span.style.fontSize = '18px';
+          span.style.fontWeight = '900';
           span.style.color = '#00ffff';
-          span.style.opacity = '1';
-          span.style.textAlign = span.style.textAlign || 'center';
+          span.style.whiteSpace = 'normal';
           span.style.unicodeBidi = 'embed';
-          span.style.whiteSpace = span.style.whiteSpace || 'normal';
-          span.style.fontWeight = '700';
+          span.style.textAlign = 'inherit';
         });
       });
+
       document.body.appendChild(clone);
-      clone.offsetHeight; // Force reflow
-      await document.fonts.ready; // Ensure fonts are loaded
-      await new Promise(resolve => setTimeout(resolve, 150)); // Increased delay for font rendering
+
+      // Force reflow
+      clone.offsetHeight;
+
+      // تأكد من تحميل خط Almarai بوزن 900 قبل الرسم
+      try {
+        await document.fonts.load('900 18px "Almarai"');
+      } catch (e) {
+        // لا تقطع التنفيذ إن فشل؛ document.fonts.ready يعطي مؤكد لاحقًا
+      }
+      await document.fonts.ready;
+      // وقت صغير كي تتأكد المتصفحات رندرت كل شيء
+      await new Promise(resolve => setTimeout(resolve, 120));
+
+      // دقة الصورة - استخدم devicePixelRatio لجعل الصورة حادة
+      const pixelRatio = window.devicePixelRatio || 1;
+      const scale = Math.max(1, Math.min(3, pixelRatio * 1)); // يمكن تعديل المضاعف هنا (1 أو 2) لتحسين الحدة
       const opts = {
-        scale: 1,
+        scale: scale,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#000000',
+        backgroundColor: "#000000",
         logging: false,
         windowWidth: clone.scrollWidth,
         windowHeight: clone.scrollHeight,
-        width: clone.offsetWidth,
-        height: clone.offsetHeight,
-        dpi: 300,
-        letterRendering: true
+        width: Math.round(clone.offsetWidth * scale),
+        height: Math.round(clone.offsetHeight * scale)
       };
+
       const canvas = await html2canvas(clone, opts);
       clone.remove();
+
       canvas.toBlob((blob) => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -505,9 +538,10 @@ function showResult() {
           btn.classList.remove("busy");
         }, 1200);
       }, 'image/png', 1.0);
+
     } catch (err) {
       console.error(err);
-      alert("حدث خطأ أثناء إنشاء الصورة. حاول مرة أخرى أو تأكد من اتصالك بالإنترنت.");
+      alert("حدث خطأ أثناء إنشاء الصورة. حاول مرة أخرى.");
       btn.classList.remove("busy");
       btn.innerHTML = "⬇️";
     }
