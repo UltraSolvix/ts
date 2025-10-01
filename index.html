@@ -6,479 +6,521 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@700;900&display=swap');
 body {
-margin:0;
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background: radial-gradient(circle at bottom center, #00ffff 0%, #0500aa 40%, #000000 100%);
-font-family:'Almarai', sans-serif;
-color:#00ffff;
-padding:10px;
-box-sizing:border-box;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at bottom center, #00ffff 0%, #0500aa 40%, #000000 100%);
+  font-family: 'Almarai', sans-serif;
+  color: #00ffff;
+  padding: 10px;
+  box-sizing: border-box;
 }
 .container {
-background: rgba(0,0,0,0.25);
-border-radius: 25px;
-box-shadow: 0 0 20px 6px aqua, 0 0 40px 14px #00ffffaa;
-width: 100%;
-max-width: 700px;
-height: 75vh;
-overflow:hidden;
-display:flex;
-flex-direction: column;
-padding: 20px;
-box-sizing:border-box;
+  background: rgba(0,0,0,0.25);
+  border-radius: 25px;
+  box-shadow: 0 0 20px 6px aqua, 0 0 40px 14px #00ffffaa;
+  width: 100%;
+  max-width: 700px;
+  height: 75vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
 }
 .inner-container {
-padding: 10px;
-overflow-y: auto;
-height: 100%;
-scrollbar-width: none;
+  padding: 10px;
+  overflow-y: auto;
+  height: 100%;
+  scrollbar-width: none;
 }
-.inner-container::-webkit-scrollbar { width:0; }
+.inner-container::-webkit-scrollbar { width: 0; }
 .question, .result-card, .schedule-card {
-margin-bottom:15px;
-font-size:1rem;
-display:flex;
-flex-direction: column;
-transform: translateY(20px);
-opacity:0;
-transition: all 0.4s ease;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s ease;
 }
 .question.show, .result-card.show, .schedule-card.show {
-transform: translateY(0);
-opacity:1;
+  transform: translateY(0);
+  opacity: 1;
 }
 .input-container {
-position: relative;
-width: 100%;
+  position: relative;
+  width: 100%;
 }
 .input-container input,
 .input-container select {
-padding: 12px 10px;
-width: 100%;
-border-radius: 20px;
-border: 2px solid #00ffff;
-background: rgba(0,0,0,0.25);
-color: #00ffff;
-font-size: 1rem;
-outline: none;
-box-sizing: border-box;
+  padding: 12px 10px;
+  width: 100%;
+  border-radius: 20px;
+  border: 2px solid #00ffff;
+  background: rgba(0,0,0,0.25);
+  color: #00ffff;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
 }
 .input-container input::placeholder {
-color: rgba(0,255,255,0.6);
-font-size:0.9rem;
+  color: rgba(0,255,255,0.6);
+  font-size: 0.9rem;
 }
 .input-container select option {
-background: #000;
-color: #00ffff;
+  background: #000;
+  color: #00ffff;
 }
 .result-card, .schedule-card {
-background: rgba(0,0,0,0.4);
-border-radius:15px;
-padding:15px;
-font-size:1rem;
-line-height:1.5;
-position: relative;
+  background: rgba(0,0,0,0.4);
+  border-radius: 15px;
+  padding: 15px;
+  font-size: 1rem;
+  line-height: 1.5;
+  position: relative;
 }
 #scheduleCard {
-padding: 18px;
-border-radius: 14px;
-background: #000;
-box-shadow: inset 0 0 30px purple;
-color: #00ffff;
-font-family: 'Almarai', sans-serif;
-min-width: 300px;
-width: 100%;
+  padding: 18px;
+  border-radius: 14px;
+  background: #000;
+  box-shadow: inset 0 0 30px purple;
+  color: #00ffff;
+  font-family: 'Almarai', sans-serif;
+  min-width: 300px;
+  width: 100%;
 }
 #scheduleCard span { color: #00ffff; }
 .download-btn {
-margin-top: 12px;
-align-self: center;
-background: rgba(0,0,0,0.6);
-border: 2px solid #00ffff;
-border-radius: 50%;
-width: 52px;
-height: 52px;
-font-size: 20px;
-color: #00ffff;
-cursor: pointer;
-display: flex;
-justify-content: center;
-align-items: center;
-transition: 0.18s;
-user-select: none;
+  margin-top: 12px;
+  align-self: center;
+  background: rgba(0,0,0,0.6);
+  border: 2px solid #00ffff;
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  font-size: 20px;
+  color: #00ffff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.18s;
+  user-select: none;
 }
 .download-btn:hover {
-background: #00ffff;
-color: #000;
-transform: translateY(-3px);
+  background: #00ffff;
+  color: #000;
+  transform: translateY(-3px);
 }
 .download-btn.busy {
-opacity: 0.7;
-transform: scale(0.98);
-pointer-events: none;
+  opacity: 0.7;
+  transform: scale(0.98);
+  pointer-events: none;
 }
 .question-label {
-text-align: right;
-margin-bottom: 5px;
-font-weight: bold;
-font-size: 1.1rem;
-color: #00ffff;
-opacity: 0.9;
+  text-align: right;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #00ffff;
+  opacity: 0.9;
 }
 @media (max-width:480px) {
-.container { height: auto; padding: 15px; }
-.question, .result-card, .schedule-card { font-size: 0.9rem; }
-.input-container input, .input-container select { font-size: 0.9rem; padding: 10px 8px; }
-.download-btn { width:48px; height:48px; font-size:18px; }
-.question-label { font-size: 1rem; }
-#scheduleCard { font-size: 0.85rem; min-width: 250px; }
+  .container { height: auto; padding: 15px; }
+  .question, .result-card, .schedule-card { font-size: 0.9rem; }
+  .input-container input, .input-container select { font-size: 0.9rem; padding: 10px 8px; }
+  .download-btn { width: 48px; height: 48px; font-size: 18px; }
+  .question-label { font-size: 1rem; }
+  #scheduleCard { font-size: 0.85rem; min-width: 250px; }
 }
 </style>
 </head>
 <body>
 <div class="container">
-<div class="inner-container" id="questionContainer"></div>
+  <div class="inner-container" id="questionContainer"></div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" crossorigin="anonymous"></script>
 <script>
 const questions = [
-{text:"العمر (سنوات)", type:"number", min:1, max:120},
-{text:"الجنس", type:"select", options:["ذكر","انثى"]},
-{text:"الوزن (كجم)", type:"number", min:10, max:300},
-{text:"الطول (سم)", type:"number", min:50, max:250},
-{text:"نسبة الدهون في الجسم (%)", type:"number", min:0, max:70, default:0},
-{text:"نوع الرياضة", type:"select", options:["جري","كارديو","قوة","hiit","سباحة","مختلط","آخرى"], default:"مختلط"},
-{text:"عدد أيام التدريب أسبوعيًا", type:"number", min:0, max:14, default:3},
-{text:"متوسط مدة التمرين (دقيقة)", type:"number", min:0, max:300, default:45},
-{text:"شدة التمرين (RPE 1-10)", type:"number", min:1, max:10, default:6},
-{text:"هل تستطيع قياس التعرق؟", type:"select", options:["نعم","لا"], default:"لا"},
-{text:"الوزن قبل التمرين (كجم)", type:"number", min:10, max:300, condition:(a)=>a[9]==="نعم"},
-{text:"الوزن بعد التمرين (كجم)", type:"number", min:10, max:300, condition:(a)=>a[9]==="نعم"},
-{text:"مدة التمرين عند القياس (دقيقة)", type:"number", min:1, max:300, condition:(a)=>a[9]==="نعم"},
-{text:"كم لتر شربت أثناء التمرين؟", type:"number", min:0, max:5, step:0.1, default:0, condition:(a)=>a[9]==="نعم"},
-{text:"هل لديك تحاليل دم/بول حديثة؟", type:"select", options:["نعم","لا"], default:"لا"},
-{text:"مستوى الصوديوم في الدم (mmol/L)", type:"number", min:120, max:160, condition:(a)=>a[14]==="نعم"},
-{text:"أسمولية البول (mOsm/kg)", type:"number", min:0, max:1500, condition:(a)=>a[14]==="نعم"},
-{text:"كرياتينين (mg/dL)", type:"number", min:0, max:20, condition:(a)=>a[14]==="نعم"},
-{text:"هل تتناول مدرات بول؟", type:"select", options:["نعم","لا"], default:"لا"},
-{text:"أسماء أدوية مهمة أخرى", type:"text"},
-{text:"مكملات تتناولها", type:"text"},
-{text:"كم ملليلتر من الكافيين يوميًا؟", type:"number", min:0, max:1000, default:0},
-{text:"كم لتر من المشروبات الرياضية/الإلكترولايت يوميًا؟", type:"number", min:0, max:5, default:0},
-{text:"كم لتر ماء عادي تشرب يوميًا تقريبًا؟", type:"number", min:0, max:5, default:1},
-{text:"نسبة الفواكه والخضار من النظام الغذائي (%)", type:"number", min:0, max:100, default:30},
-{text:"كم وجبة مالحة/مصنّعة يوميًا؟", type:"number", min:0, max:10, default:1},
-{text:"درجة الحرارة المحيطة (°م)", type:"number", min:-10, max:60, default:25},
-{text:"نسبة الرطوبة (%)", type:"number", min:0, max:100, default:50},
-{text:"التمرين في الهواء الطلق؟", type:"select", options:["نعم","لا"], default:"لا"},
-{text:"كم ساعة تنام ليلًا؟", type:"number", min:0, max:12, default:7},
-{text:"هل تستيقظ عطشانًا ليلًا؟", type:"select", options:["نعم","لا"], default:"لا"},
-{text:"مرحلة الدورة (إناث فقط)", type:"select", options:["حيض","بويضة","لا","غير_مطبق"], condition:(a)=>a[1]==="انثى", default:"لا"},
-{text:"هل تصوم حاليًا؟", type:"select", options:["نعم","لا"], default:"لا"},
-{text:"لون البول صباحًا/بعد التمرين", type:"select", options:["شفاف","فاتح","غامق"], default:"فاتح"},
-{text:"كم مرة تتبول يوميًا؟", type:"number", min:0, max:20, default:6},
-{text:"هل تتبول ليلًا؟", type:"select", options:["نعم","لا"], default:"لا"},
-{text:"أعراض جفاف (صداع/تعب/تشنجات)؟", type:"select", options:["نعم","لا"], default:"لا"},
-{text:"متوسط معدل ضربات القلب أثناء التمرين (BPM)", type:"number", min:0, max:220, default:0},
-{text:"وقت الاستيقاظ", type:"time", default:"06:00" , placeholder:"اختر وقت الاستيقاظ (HH:MM)"},
-{text:"وقت النوم", type:"time", default:"22:30" , placeholder:"اختر وقت النوم (HH:MM)"},
-// === الأسئلة الجديدة ===
-{text:"وقت بدء التمرين", type:"time", default:"17:00" , placeholder:"اختر وقت بدء التمرين (HH:MM)"},
-{text:"وقت انتهاء التمرين", type:"time", default:"18:00", placeholder:"اختر وقت انتهاء التمرين (HH:MM)"},
-{text:"وقت الإفطار", type:"time", default:"08:00", placeholder:"اختر وقت الإفطار (HH:MM)"},
-{text:"وقت السناك الصباحي", type:"time", default:"10:00", placeholder:"اختر وقت السناك الصباحي (HH:MM)"},
-{text:"وقت الغداء", type:"time", default:"13:00", placeholder:"اختر وقت الغداء (HH:MM)"},
-{text:"وقت السناك بعد الظهر", type:"time", default:"15:00", placeholder:"اختر وقت السناك بعد الظهر (HH:MM)"},
-{text:"وقت العشاء", type:"time", default:"19:00", placeholder:"اختر وقت العشاء (HH:MM)"},
-{text:"وقت السناك المسائي", type:"time", default:"20:00", placeholder:"اختر وقت السناك المسائي (HH:MM)"}
+  {text: "العمر (سنوات)", type: "number", min: 1, max: 120},
+  {text: "الجنس", type: "select", options: ["ذكر", "انثى"]},
+  {text: "الوزن (كجم)", type: "number", min: 10, max: 300},
+  {text: "الطول (سم)", type: "number", min: 50, max: 250},
+  {text: "نسبة الدهون في الجسم (%)", type: "number", min: 0, max: 70, default: 0},
+  {text: "نوع الرياضة", type: "select", options: ["جري", "كارديو", "قوة", "hiit", "سباحة", "مختلط", "آخرى"], default: "مختلط"},
+  {text: "عدد أيام التدريب أسبوعيًا", type: "number", min: 0, max: 14, default: 3},
+  {text: "متوسط مدة التمرين (دقيقة)", type: "number", min: 0, max: 300, default: 45},
+  {text: "شدة التمرين (RPE 1-10)", type: "number", min: 1, max: 10, default: 6},
+  {text: "هل تستطيع قياس التعرق؟", type: "select", options: ["نعم", "لا"], default: "لا"},
+  {text: "الوزن قبل التمرين (كجم)", type: "number", min: 10, max: 300, condition: (a) => a[9] === "نعم"},
+  {text: "الوزن بعد التمرين (كجم)", type: "number", min: 10, max: 300, condition: (a) => a[9] === "نعم"},
+  {text: "مدة التمرين عند القياس (دقيقة)", type: "number", min: 1, max: 300, condition: (a) => a[9] === "نعم"},
+  {text: "كم لتر شربت أثناء التمرين؟", type: "number", min: 0, max: 5, step: 0.1, default: 0, condition: (a) => a[9] === "نعم"},
+  {text: "هل لديك تحاليل دم/بول حديثة؟", type: "select", options: ["نعم", "لا"], default: "لا"},
+  {text: "مستوى الصوديوم في الدم (mmol/L)", type: "number", min: 120, max: 160, condition: (a) => a[14] === "نعم"},
+  {text: "أسمولية البول (mOsm/kg)", type: "number", min: 0, max: 1500, condition: (a) => a[14] === "نعم"},
+  {text: "كرياتينين (mg/dL)", type: "number", min: 0, max: 20, condition: (a) => a[14] === "نعم"},
+  {text: "هل تتناول مدرات بول؟", type: "select", options: ["نعم", "لا"], default: "لا"},
+  {text: "أسماء أدوية مهمة أخرى", type: "text"},
+  {text: "مكملات تتناولها", type: "text"},
+  {text: "كم ملليلتر من الكافيين يوميًا؟", type: "number", min: 0, max: 1000, default: 0},
+  {text: "كم لتر من المشروبات الرياضية/الإلكترولايت يوميًا؟", type: "number", min: 0, max: 5, default: 0},
+  {text: "كم لتر ماء عادي تشرب يوميًا تقريبًا؟", type: "number", min: 0, max: 5, default: 1},
+  {text: "نسبة الفواكه والخضار من النظام الغذائي (%)", type: "number", min: 0, max: 100, default: 30},
+  {text: "كم وجبة مالحة/مصنّعة يوميًا؟", type: "number", min: 0, max: 10, default: 1},
+  {text: "درجة الحرارة المحيطة (°م)", type: "number", min: -10, max: 60, default: 25},
+  {text: "نسبة الرطوبة (%)", type: "number", min: 0, max: 100, default: 50},
+  {text: "التمرين في الهواء الطلق؟", type: "select", options: ["نعم", "لا"], default: "لا"},
+  {text: "كم ساعة تنام ليلًا؟", type: "number", min: 0, max: 12, default: 7},
+  {text: "هل تستيقظ عطشانًا ليلًا؟", type: "select", options: ["نعم", "لا"], default: "لا"},
+  {text: "مرحلة الدورة (إناث فقط)", type: "select", options: ["حيض", "بويضة", "لا", "غير_مطبق"], condition: (a) => a[1] === "انثى", default: "لا"},
+  {text: "هل تصوم حاليًا؟", type: "select", options: ["نعم", "لا"], default: "لا"},
+  {text: "لون البول صباحًا/بعد التمرين", type: "select", options: ["شفاف", "فاتح", "غامق"], default: "فاتح"},
+  {text: "كم مرة تتبول يوميًا؟", type: "number", min: 0, max: 20, default: 6},
+  {text: "هل تتبول ليلًا؟", type: "select", options: ["نعم", "لا"], default: "لا"},
+  {text: "أعراض جفاف (صداع/تعب/تشنجات)؟", type: "select", options: ["نعم", "لا"], default: "لا"},
+  {text: "متوسط معدل ضربات القلب أثناء التمرين (BPM)", type: "number", min: 0, max: 220, default: 0},
+  {text: "وقت الاستيقاظ", type: "time", default: "06:00", placeholder: "اختر وقت الاستيقاظ (HH:MM)"},
+  {text: "وقت النوم", type: "time", default: "22:30", placeholder: "اختر وقت النوم (HH:MM)"},
+  {text: "وقت بدء التمرين", type: "time", default: "17:00", placeholder: "اختر وقت بدء التمرين (HH:MM)"},
+  {text: "وقت انتهاء التمرين", type: "time", default: "18:00", placeholder: "اختر وقت انتهاء التمرين (HH:MM)"},
+  {text: "وقت الإفطار", type: "time", default: "08:00", placeholder: "اختر وقت الإفطار (HH:MM)"},
+  {text: "وقت السناك الصباحي", type: "time", default: "10:00", placeholder: "اختر وقت السناك الصباحي (HH:MM)"},
+  {text: "وقت الغداء", type: "time", default: "13:00", placeholder: "اختر وقت الغداء (HH:MM)"},
+  {text: "وقت السناك بعد الظهر", type: "time", default: "15:00", placeholder: "اختر وقت السناك بعد الظهر (HH:MM)"},
+  {text: "وقت العشاء", type: "time", default: "19:00", placeholder: "اختر وقت العشاء (HH:MM)"},
+  {text: "وقت السناك المسائي", type: "time", default: "20:00", placeholder: "اختر وقت السناك المسائي (HH:MM)"}
 ];
 
-// --- كل شيء من هنا يبقى كما هو، مع تعديل حساب التمرين فقط ---
 const container = document.getElementById('questionContainer');
 let answers = [];
 let lastAnsweredIndex = -1;
 
-function createQuestionElement(obj, index){
-const div = document.createElement('div');
-div.classList.add('question');
-const wrapper = document.createElement('div');
-wrapper.classList.add('input-container');
+function createQuestionElement(obj, index) {
+  const div = document.createElement('div');
+  div.classList.add('question');
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('input-container');
 
-if (obj.type === 'time') {
-const label = document.createElement('span');
-label.classList.add('question-label');
-label.textContent = `${obj.text}`;
-div.appendChild(label);
-}
+  if (obj.type === 'time') {
+    const label = document.createElement('span');
+    label.classList.add('question-label');
+    label.textContent = `${obj.text}`;
+    div.appendChild(label);
+  }
 
-let input;
-if(obj.type==="select"){
-input = document.createElement('select');
-const placeholder = document.createElement('option');
-placeholder.value = "";
-placeholder.disabled = true;
-placeholder.selected = true;
-placeholder.textContent = obj.text;
-placeholder.style.color = "rgba(0,255,255,0.6)";
-input.appendChild(placeholder);
-obj.options.forEach(opt=>{
-const option = document.createElement('option');
-option.value = opt;
-option.textContent = opt;
-input.appendChild(option);
-});
-input.addEventListener('change', handleSelect);
-} else {
-input = document.createElement('input');
-input.type = obj.type==="time"?"time":obj.type;
-input.placeholder = obj.placeholder || obj.text;
-if(obj.type==="time"){ input.addEventListener('change', handleTimeChange); }
-else { input.addEventListener('keypress', handleEnter); }
-if(obj.default!==undefined) input.value=obj.default;
-}
+  let input;
+  if (obj.type === "select") {
+    input = document.createElement('select');
+    const placeholder = document.createElement('option');
+    placeholder.value = "";
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    placeholder.textContent = obj.text;
+    placeholder.style.color = "rgba(0,255,255,0.6)";
+    input.appendChild(placeholder);
+    obj.options.forEach(opt => {
+      const option = document.createElement('option');
+      option.value = opt;
+      option.textContent = opt;
+      input.appendChild(option);
+    });
+    input.addEventListener('change', handleSelect);
+  } else {
+    input = document.createElement('input');
+    input.type = obj.type === "time" ? "time" : obj.type;
+    input.placeholder = obj.placeholder || obj.text;
+    if (obj.type === "time") {
+      input.addEventListener('change', handleTimeChange);
+    } else {
+      input.addEventListener('keypress', handleEnter);
+    }
+    if (obj.default !== undefined) input.value = obj.default;
+  }
 
-input.setAttribute('data-index', index);
-wrapper.appendChild(input);
-div.appendChild(wrapper);
-return div;
-}
-
-function validateInput(value, obj){
-if(obj.type==="number"){
-const num=parseFloat(value);
-if(isNaN(num)) return false;
-if(obj.min!==undefined && num<obj.min) return false;
-if(obj.max!==undefined && num>obj.max) return false;
-}
-if(obj.type==="select") return obj.options.includes(value);
-if(obj.type==="time") return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(value.trim());
-return true;
+  input.setAttribute('data-index', index);
+  wrapper.appendChild(input);
+  div.appendChild(wrapper);
+  return div;
 }
 
-function handleEnter(e){
-if(e.key==='Enter'){
-const idx=parseInt(e.target.getAttribute('data-index'));
-const q=questions[idx];
-const val=e.target.value;
-if(!validateInput(val,q)){ alert("⚠️ إدخال غير صالح."); e.target.focus(); return; }
-answers[idx]=val;
-if(idx>lastAnsweredIndex){ lastAnsweredIndex=idx; nextQuestion(idx); }
-}
-}
-function handleSelect(e){ const idx=parseInt(e.target.getAttribute('data-index')); const val=e.target.value; answers[idx]=val; if(idx>lastAnsweredIndex){ lastAnsweredIndex=idx; nextQuestion(idx); } }
-function handleTimeChange(e){ const idx=parseInt(e.target.getAttribute('data-index')); const val=e.target.value; if(!validateInput(val, questions[idx])){ alert("⚠️ إدخال غير صالح."); e.target.focus(); return; } answers[idx]=val; if(idx>lastAnsweredIndex){ lastAnsweredIndex=idx; nextQuestion(idx); } }
-
-function nextQuestion(idx){
-let nextIndex=idx+1;
-while(nextIndex<questions.length){
-const nextQ=questions[nextIndex];
-if(!nextQ.condition || nextQ.condition(answers)) break;
-nextIndex++;
-}
-if(nextIndex<questions.length){
-const nextElem=createQuestionElement(questions[nextIndex],nextIndex);
-container.appendChild(nextElem);
-setTimeout(()=>nextElem.classList.add('show'),50);
-nextElem.querySelector('input,select').focus();
-nextElem.scrollIntoView({behavior:'smooth', block:'end'});
-} else { showResult(); }
+function validateInput(value, obj) {
+  if (obj.type === "number") {
+    const num = parseFloat(value);
+    if (isNaN(num)) return false;
+    if (obj.min !== undefined && num < obj.min) return false;
+    if (obj.max !== undefined && num > obj.max) return false;
+  }
+  if (obj.type === "select") return obj.options.includes(value);
+  if (obj.type === "time") return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(value.trim());
+  return true;
 }
 
-const firstQ=createQuestionElement(questions[0],0);
+function handleEnter(e) {
+  if (e.key === 'Enter') {
+    const idx = parseInt(e.target.getAttribute('data-index'));
+    const q = questions[idx];
+    const val = e.target.value;
+    if (!validateInput(val, q)) {
+      alert("⚠️ إدخال غير صالح.");
+      e.target.focus();
+      return;
+    }
+    answers[idx] = val;
+    if (idx > lastAnsweredIndex) {
+      lastAnsweredIndex = idx;
+      nextQuestion(idx);
+    }
+  }
+}
+
+function handleSelect(e) {
+  const idx = parseInt(e.target.getAttribute('data-index'));
+  const val = e.target.value;
+  answers[idx] = val;
+  if (idx > lastAnsweredIndex) {
+    lastAnsweredIndex = idx;
+    nextQuestion(idx);
+  }
+}
+
+function handleTimeChange(e) {
+  const idx = parseInt(e.target.getAttribute('data-index'));
+  const val = e.target.value;
+  if (!validateInput(val, questions[idx])) {
+    alert("⚠️ إدخال غير صالح.");
+    e.target.focus();
+    return;
+  }
+  answers[idx] = val;
+  if (idx > lastAnsweredIndex) {
+    lastAnsweredIndex = idx;
+    nextQuestion(idx);
+  }
+}
+
+function nextQuestion(idx) {
+  let nextIndex = idx + 1;
+  while (nextIndex < questions.length) {
+    const nextQ = questions[nextIndex];
+    if (!nextQ.condition || nextQ.condition(answers)) break;
+    nextIndex++;
+  }
+  if (nextIndex < questions.length) {
+    const nextElem = createQuestionElement(questions[nextIndex], nextIndex);
+    container.appendChild(nextElem);
+    setTimeout(() => nextElem.classList.add('show'), 50);
+    nextElem.querySelector('input,select').focus();
+    nextElem.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  } else {
+    showResult();
+  }
+}
+
+const firstQ = createQuestionElement(questions[0], 0);
 container.appendChild(firstQ);
-setTimeout(()=>firstQ.classList.add('show'),50);
+setTimeout(() => firstQ.classList.add('show'), 50);
 firstQ.querySelector('input,select').focus();
 
 function addMinutes(timeStr, mins) {
-const [h, m] = timeStr.split(':').map(Number);
-let totalMins = h * 60 + m + mins;
-if (totalMins < 0) totalMins += 1440; // إذا كان سالب، أعد لليوم السابق
-const newH = Math.floor(totalMins / 60) % 24;
-const newM = totalMins % 60;
-return `${newH.toString().padStart(2, '0')}:${newM.toString().padStart(2, '0')}`;
+  const [h, m] = timeStr.split(':').map(Number);
+  let totalMins = h * 60 + m + mins;
+  if (totalMins < 0) totalMins += 1440;
+  const newH = Math.floor(totalMins / 60) % 24;
+  const newM = totalMins % 60;
+  return `${newH.toString().padStart(2, '0')}:${newM.toString().padStart(2, '0')}`;
 }
 
-function showResult(){
-let user={}; questions.forEach((q,i)=>{user[i]=answers[i];});
-let base = parseFloat(user[2]*0.033*0.94);
-if(user[4] && parseFloat(user[4])<15) base+=base*0.05;
-if(user[1]==="انثى") base-=base*0.10;
-if(user[0]>40) base+=0.05;
-base += (parseFloat(user[6]||3)*0.2)+((parseFloat(user[7]||45)/60)*0.8);
-if(parseFloat(user[8]||6)>7 || parseFloat(user[44]||0)>150) base*=1.12;
-if(user[9]==="نعم" && user[10] && user[11]){
-let sweat=(parseFloat(user[10])-parseFloat(user[11]))+parseFloat(user[13]||0);
-base += sweat*(parseFloat(user[6]||3)/7);
-}
-if(parseFloat(user[22]||0)>400) base+=0.2;
-if(user[19]==="نعم") base+=0.7;
-if(user[20] && user[20].toLowerCase().includes("creat")) base+=0.25;
-if(parseFloat(user[29]||7)<7 || user[30]==="نعم") base+=0.2;
-if(user[34]==="غامق") base+=0.5;
-if(user[36]==="نعم") base+=0.4;
-base=Math.max(2.0, Math.min(base,6.0));
-base=Math.round(base*100)/100;
+function showResult() {
+  let user = {};
+  questions.forEach((q, i) => { user[i] = answers[i]; });
+  let base = parseFloat(user[2] * 0.033 * 0.94);
+  if (user[4] && parseFloat(user[4]) < 15) base += base * 0.05;
+  if (user[1] === "انثى") base -= base * 0.10;
+  if (user[0] > 40) base += 0.05;
+  base += (parseFloat(user[6] || 3) * 0.2) + ((parseFloat(user[7] || 45) / 60) * 0.8);
+  if (parseFloat(user[8] || 6) > 7 || parseFloat(user[44] || 0) > 150) base *= 1.12;
+  if (user[9] === "نعم" && user[10] && user[11]) {
+    let sweat = (parseFloat(user[10]) - parseFloat(user[11])) + parseFloat(user[13] || 0);
+    base += sweat * (parseFloat(user[6] || 3) / 7);
+  }
+  if (parseFloat(user[22] || 0) > 400) base += 0.2;
+  if (user[19] === "نعم") base += 0.7;
+  if (user[20] && user[20].toLowerCase().includes("creat")) base += 0.25;
+  if (parseFloat(user[29] || 7) < 7 || user[30] === "نعم") base += 0.2;
+  if (user[34] === "غامق") base += 0.5;
+  if (user[36] === "نعم") base += 0.4;
+  base = Math.max(2.0, Math.min(base, 6.0));
+  base = Math.round(base * 100) / 100;
 
-const div=document.createElement('div');
-div.classList.add('result-card');
-div.innerHTML=`<strong>💧 الترطيب اليومي المقدر:</strong> ${base} لتر/يوم`;
-container.appendChild(div);
-setTimeout(()=>div.classList.add('show'),50);
-div.scrollIntoView({behavior:'smooth', block:'end'});
+  const div = document.createElement('div');
+  div.classList.add('result-card');
+  div.innerHTML = `<strong>💧 الترطيب اليومي المقدر:</strong> ${base} لتر/يوم`;
+  container.appendChild(div);
+  setTimeout(() => div.classList.add('show'), 50);
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
-const wake_time=user[38]||"06:00";
-const sleep_time=user[39]||"22:30";
-const exercise_start = user[40] || "17:00";
-const exercise_end = user[41] || "18:00";
-const breakfast_time = user[42] || "08:00";
-const morning_snack_time = user[43] || "10:00";
-const lunch_time = user[44] || "13:00";
-const afternoon_snack_time = user[45] || "15:00";
-const dinner_time = user[46] || "19:00";
-const evening_snack_time = user[47] || "20:00";
-let total_ml = base*1000;
+  const wake_time = user[38] || "06:00";
+  const sleep_time = user[39] || "22:30";
+  const exercise_start = user[40] || "17:00";
+  const exercise_end = user[41] || "18:00";
+  const breakfast_time = user[42] || "08:00";
+  const morning_snack_time = user[43] || "10:00";
+  const lunch_time = user[44] || "13:00";
+  const afternoon_snack_time = user[45] || "15:00";
+  const dinner_time = user[46] || "19:00";
+  const evening_snack_time = user[47] || "20:00";
+  let total_ml = base * 1000;
 
-const windows = [
-["استيقاظ",0.20], ["تحضير الصباح",0.06], ["إفطار",0.14], ["سناك صباحي",0.06],
-["غداء",0.14], ["سناك بعد الظهر",0.09], ["قبل التمرين",0.06],
-["أثناء التمرين",0.14], ["بعد التمرين",0.09], ["عشاء",0.11], ["سناك مسائي",0.05],
-["قبل النوم",0.05]
-];
+  const windows = [
+    ["استيقاظ", 0.20], ["تحضير الصباح", 0.06], ["إفطار", 0.14], ["سناك صباحي", 0.06],
+    ["غداء", 0.14], ["سناك بعد الظهر", 0.09], ["قبل التمرين", 0.06],
+    ["أثناء التمرين", 0.14], ["بعد التمرين", 0.09], ["عشاء", 0.11], ["سناك مسائي", 0.05],
+    ["قبل النوم", 0.05]
+  ];
 
-const times = {
-"استيقاظ": wake_time,
-"تحضير الصباح": addMinutes(wake_time, 30),
-"إفطار": breakfast_time,
-"سناك صباحي": morning_snack_time,
-"غداء": lunch_time,
-"سناك بعد الظهر": afternoon_snack_time,
-"قبل التمرين": addMinutes(exercise_start, -30),
-"أثناء التمرين": exercise_start,
-"بعد التمرين": exercise_end,
-"عشاء": dinner_time,
-"سناك مسائي": evening_snack_time,
-"قبل النوم": addMinutes(sleep_time, -30)
-};
+  const times = {
+    "استيقاظ": wake_time,
+    "تحضير الصباح": addMinutes(wake_time, 30),
+    "إفطار": breakfast_time,
+    "سناك صباحي": morning_snack_time,
+    "غداء": lunch_time,
+    "سناك بعد الظهر": afternoon_snack_time,
+    "قبل التمرين": addMinutes(exercise_start, -30),
+    "أثناء التمرين": exercise_start,
+    "بعد التمرين": exercise_end,
+    "عشاء": dinner_time,
+    "سناك مسائي": evening_snack_time,
+    "قبل النوم": addMinutes(sleep_time, -30)
+  };
 
-let scheduleDiv=document.createElement('div');
-scheduleDiv.classList.add('schedule-card');
-scheduleDiv.id = "scheduleCard";
-scheduleDiv.innerHTML="<strong>🕒 جدول الترطيب اليومي:</strong><br><br>";
+  let scheduleDiv = document.createElement('div');
+  scheduleDiv.classList.add('schedule-card');
+  scheduleDiv.id = "scheduleCard";
+  scheduleDiv.innerHTML = "<strong>🕒 جدول الترطيب اليومي:</strong><br><br>";
 
-windows.forEach((w,i)=>{
-const timeStr = times[w[0]];
-let ml=Math.round(total_ml*w[1]);
-ml = Math.max(120, Math.min(350, ml));
-const line = document.createElement('div');
-line.style.margin = "6px 0";
-line.style.display = "flex";
-line.style.justifyContent = "space-between";
-line.style.gap = "10px";
-line.style.alignItems = "center";
-line.innerHTML = `<span style="width: 25%; text-align: right; opacity:0.9; white-space: nowrap;">${timeStr}</span>
-<span style="width: 50%; text-align: center; font-weight:600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${w[0]}</span>
-<span style="width: 25%; text-align: left; opacity:0.9; white-space: nowrap;">${ml} ml</span>`;
-scheduleDiv.appendChild(line);
-});
-
-const btn = document.createElement("button");
-btn.classList.add("download-btn");
-btn.setAttribute("title", "تحميل الجدول كصورة");
-btn.innerHTML = "⬇️";
-
-btn.addEventListener("click", async () => {
-try {
-btn.classList.add("busy");
-btn.innerHTML = "⏳";
-const clone = scheduleDiv.cloneNode(true);
-const btnInClone = clone.querySelector('.download-btn');
-if (btnInClone) btnInClone.remove();
-clone.style.position = 'absolute';
-clone.style.left = '-99999px';
-clone.style.top = '0';
-clone.style.width = `${Math.min(window.innerWidth * 0.9, 600)}px`;
-clone.style.minHeight = 'fit-content';
-clone.style.fontSize = '18px'; // زيادة حجم الخط للوضوح أكبر
-clone.style.background = '#000000'; // خلفية سوداء تماماً
-clone.style.boxShadow = 'none';
-clone.style.color = '#00ffff'; // لون أكوا
-clone.style.fontFamily = 'Almarai, sans-serif';
-clone.style.fontWeight = '900'; // خط أكثر سمكاً للوضوح
-clone.style.padding = '30px'; // زيادة الحشو
-clone.style.letterSpacing = '1px'; // تباعد أكبر
-clone.style.wordSpacing = '2px';
-clone.style.lineHeight = '1.8'; // ارتفاع سطر أكبر
-clone.style.textRendering = 'optimizeLegibility';
-clone.style.fontFeatureSettings = '"kern"';
-clone.style.direction = 'rtl';
-clone.style.textAlign = 'right';
-clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 900;">').replace('</strong>', '</span>');
-const boldSpans = clone.querySelectorAll('span[style*="font-weight:600"]');
-boldSpans.forEach(span => { span.style.fontWeight = '900'; });
-const opacitySpans = clone.querySelectorAll('span[style*="opacity:0.9"]');
-opacitySpans.forEach(span => { span.style.opacity = '1'; });
-const lines = clone.querySelectorAll('div[style*="display: flex"]');
-lines.forEach(line => {
-  line.style.gap = '20px';
-  line.style.padding = '5px 15px';
-  line.style.margin = '10px 0'; // مسافات أكبر
-  const spans = line.querySelectorAll('span');
-  spans[0].style.width = '30%';
-  spans[1].style.width = '40%';
-  spans[2].style.width = '30%';
-  spans[1].style.overflow = 'visible';
-  spans[1].style.whiteSpace = 'normal';
-  spans.forEach(span => {
-    span.style.fontSize = '18px';
-    span.style.color = '#00ffff';
-    span.style.textAlign = span.style.textAlign; // الحفاظ على المحاذاة
+  windows.forEach((w, i) => {
+    const timeStr = times[w[0]];
+    let ml = Math.round(total_ml * w[1]);
+    ml = Math.max(120, Math.min(350, ml));
+    const line = document.createElement('div');
+    line.style.margin = "6px 0";
+    line.style.display = "flex";
+    line.style.justifyContent = "space-between";
+    line.style.gap = "10px";
+    line.style.alignItems = "center";
+    line.innerHTML = `<span style="width: 25%; text-align: right; opacity:0.9; white-space: nowrap;">${timeStr}</span>
+      <span style="width: 50%; text-align: center; font-weight:600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${w[0]}</span>
+      <span style="width: 25%; text-align: left; opacity:0.9; white-space: nowrap;">${ml} ml</span>`;
+    scheduleDiv.appendChild(line);
   });
-});
-document.body.appendChild(clone);
-clone.offsetHeight; // Force reflow
-await document.fonts.ready; // الانتظار حتى يتم تحميل الخطوط لضمان الوضوح
-const pixelRatio = window.devicePixelRatio || 1;
-const opts = {
-scale: pixelRatio * 4,
-useCORS: true,
-allowTaint: true,
-backgroundColor: "#000000",
-logging: false,
-windowWidth: clone.scrollWidth,
-windowHeight: clone.scrollHeight,
-width: clone.offsetWidth * 2,
-height: clone.offsetHeight * 2,
-foreignObjectRendering: true
-};
-const canvas = await html2canvas(clone, opts);
-clone.remove();
-const dataURL = canvas.toDataURL("image/png", 1.0);
-const link = document.createElement("a");
-const now = new Date();
-const pad = n=>n.toString().padStart(2,'0');
-const fname = `hydration_${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}.png`;
-link.download = fname;
-link.href = dataURL;
-document.body.appendChild(link);
-link.click();
-link.remove();
-btn.innerHTML = "✅";
-setTimeout(()=>{ btn.innerHTML = "⬇️"; btn.classList.remove("busy"); }, 1200);
-} catch (err) {
-console.error(err);
-alert("حدث خطأ أثناء إنشاء الصورة.");
-btn.classList.remove("busy");
-btn.innerHTML = "⬇️";
-}
-});
 
-scheduleDiv.appendChild(btn);
-container.appendChild(scheduleDiv);
-setTimeout(()=>scheduleDiv.classList.add('show'),50);
-scheduleDiv.scrollIntoView({behavior:'smooth', block:'end'});
+  const btn = document.createElement("button");
+  btn.classList.add("download-btn");
+  btn.setAttribute("title", "تحميل الجدول كصورة");
+  btn.innerHTML = "⬇️";
+
+  btn.addEventListener("click", async () => {
+    try {
+      btn.classList.add("busy");
+      btn.innerHTML = "⏳";
+      const clone = scheduleDiv.cloneNode(true);
+      const btnInClone = clone.querySelector('.download-btn');
+      if (btnInClone) btnInClone.remove();
+      clone.style.position = 'absolute';
+      clone.style.left = '-99999px';
+      clone.style.top = '0';
+      clone.style.width = `${Math.min(window.innerWidth * 0.9, 600)}px`;
+      clone.style.minHeight = 'fit-content';
+      clone.style.fontSize = '18px';
+      clone.style.background = '#000000';
+      clone.style.boxShadow = 'none';
+      clone.style.color = '#00ffff';
+      clone.style.fontFamily = 'Almarai, sans-serif';
+      clone.style.fontWeight = '900';
+      clone.style.padding = '30px';
+      clone.style.letterSpacing = '1px';
+      clone.style.wordSpacing = '2px';
+      clone.style.lineHeight = '1.8';
+      clone.style.textRendering = 'optimizeLegibility';
+      clone.style.fontFeatureSettings = '"kern"';
+      clone.style.direction = 'rtl';
+      clone.style.textAlign = 'right';
+      clone.innerHTML = clone.innerHTML.replace('<strong>', '<span style="font-weight: 900;">').replace('</strong>', '</span>');
+      const boldSpans = clone.querySelectorAll('span[style*="font-weight:600"]');
+      boldSpans.forEach(span => { span.style.fontWeight = '900'; });
+      const opacitySpans = clone.querySelectorAll('span[style*="opacity:0.9"]');
+      opacitySpans.forEach(span => { span.style.opacity = '1'; });
+      const lines = clone.querySelectorAll('div[style*="display: flex"]');
+      lines.forEach(line => {
+        line.style.gap = '20px';
+        line.style.padding = '5px 15px';
+        line.style.margin = '10px 0';
+        const spans = line.querySelectorAll('span');
+        spans[0].style.width = '30%';
+        spans[1].style.width = '40%';
+        spans[2].style.width = '30%';
+        spans[1].style.overflow = 'visible';
+        spans[1].style.whiteSpace = 'normal';
+        spans.forEach(span => {
+          span.style.fontSize = '18px';
+          span.style.color = '#00ffff';
+          span.style.textAlign = span.style.textAlign;
+        });
+      });
+      document.body.appendChild(clone);
+      clone.offsetHeight; // Force reflow
+      await document.fonts.ready; // Ensure fonts are loaded
+      const pixelRatio = window.devicePixelRatio || 1;
+      const opts = {
+        scale: pixelRatio * 2, // Reduced for better iOS compatibility
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#000000",
+        logging: false,
+        windowWidth: clone.scrollWidth,
+        windowHeight: clone.scrollHeight,
+        width: clone.offsetWidth,
+        height: clone.offsetHeight,
+        foreignObjectRendering: true,
+        dpi: 300, // Higher DPI for clarity
+        letterRendering: true // Better text rendering
+      };
+      const canvas = await html2canvas(clone, opts);
+      clone.remove();
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const now = new Date();
+        const pad = n => n.toString().padStart(2, '0');
+        const fname = `hydration_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}.png`;
+        link.download = fname;
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        btn.innerHTML = "✅";
+        setTimeout(() => {
+          btn.innerHTML = "⬇️";
+          btn.classList.remove("busy");
+        }, 1200);
+      }, 'image/png', 1.0);
+    } catch (err) {
+      console.error(err);
+      alert("حدث خطأ أثناء إنشاء الصورة. حاول مرة أخرى.");
+      btn.classList.remove("busy");
+      btn.innerHTML = "⬇️";
+    }
+  });
+
+  scheduleDiv.appendChild(btn);
+  container.appendChild(scheduleDiv);
+  setTimeout(() => scheduleDiv.classList.add('show'), 50);
+  scheduleDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
 </script>
 </body>
